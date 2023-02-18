@@ -21,7 +21,7 @@ class Users {
     register(input) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const connection = yield index_1.client.connect();
+                const connection = (yield index_1.client.connect()).on('error', (e) => { console.log(e); });
                 const testSQL = input.email !== undefined ? "SELECT * FROM users WHERE email=$1" : "SELECT * FROM users WHERE phone_number=$1";
                 const testRes = yield connection.query(testSQL, [input.email !== undefined ? input.email : input.phone_number]);
                 if (testRes.rowCount > 0)
@@ -41,7 +41,7 @@ class Users {
     login(email, phone_number, plainPassword) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const connection = yield index_1.client.connect();
+                const connection = (yield index_1.client.connect()).on('error', (e) => { console.log(e); });
                 let res;
                 if (email === undefined) {
                     const sql = "SELECT * FROM users WHERE phone_number=($1)";
@@ -69,7 +69,7 @@ class Users {
     resetPassword(email, phone_number, new_password) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const connection = yield index_1.client.connect();
+                const connection = (yield index_1.client.connect()).on('error', (e) => { console.log(e); });
                 const newHashedPassword = bcrypt_1.default.hashSync(new_password, config_1.config.salt);
                 let result;
                 if (email === undefined) {
@@ -80,6 +80,7 @@ class Users {
                     const sql = "UPDATE users SET password = $2 WHERE email=$1 RETURNING password";
                     result = yield connection.query(sql, [email, newHashedPassword]);
                 }
+                connection.release();
                 console.log(result);
                 if (result.rows[0].password === newHashedPassword)
                     return ('Password Reset Successfully');
@@ -95,7 +96,7 @@ class Users {
     profile(email, phone_number) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const connection = yield index_1.client.connect();
+                const connection = (yield index_1.client.connect()).on('error', (e) => { console.log(e); });
                 let result;
                 if (email === undefined) {
                     const sql = 'SELECT * FROM users WHERE phone_number=$1';
@@ -105,6 +106,7 @@ class Users {
                     const sql = 'SELECT * FROM users WHERE email=$1';
                     result = yield connection.query(sql, [email]);
                 }
+                connection.release();
                 delete result.rows[0].password;
                 return result.rows[0];
             }
