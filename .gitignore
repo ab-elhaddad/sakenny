@@ -1,7 +1,0 @@
-node_modules
-spec
-src
-.env
-package-lock.json
-tsconfig.json
-.todo
