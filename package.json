@@ -7,8 +7,8 @@
     "node": "18.12.1"
   },
   "scripts": {
-    "dev:start": "node src/server.ts",
-    "prod:start": "node build/server.js",
+    "dev:start": "nodemon src/server.ts",
+    "prod:start": "node --max-old-space-size=1536 build/server.js",
     "test": "npm run build && jasmine",
     "dev:build": "npx tsc",
     "prod:build": "npm i && npx db-migrate up"
