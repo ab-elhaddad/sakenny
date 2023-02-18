@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/server.ts",
+  "engines": {
+    "node": "18.12.1"
+  },
   "scripts": {
     "start": "nodemon src/server.ts",
     "test": "npm run build && jasmine",
