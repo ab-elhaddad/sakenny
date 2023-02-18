@@ -7,9 +7,11 @@
     "node": "18.12.1"
   },
   "scripts": {
-    "start": "nodemon src/server.ts",
+    "dev:start": "node src/server.ts",
+    "prod:start": "node build/server.js",
     "test": "npm run build && jasmine",
-    "build": "npx tsc"
+    "dev:build": "npx tsc",
+    "prod:build": "npm i && npx db-migrate up"
   },
   "author": "",
   "license": "ISC",
