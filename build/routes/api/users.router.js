@@ -1,0 +1,15 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.usersRouter = void 0;
+const users_controller_1 = require("../../controllers/users.controller");
+const authenticate_middleware_1 = __importDefault(require("../../middlewares/authenticate.middleware"));
+const usersRouter = (app) => {
+    app.post('/users/register', users_controller_1.register);
+    app.get('/users/login', users_controller_1.login);
+    app.put('/users/reset-password', authenticate_middleware_1.default, users_controller_1.resetPassword);
+    app.get('/users/profile', users_controller_1.profile);
+};
+exports.usersRouter = usersRouter;
