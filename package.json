@@ -2,9 +2,9 @@
   "name": "sakkeny-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "src/server.ts",
+  "main": "build/server.js",
   "scripts": {
-    "start": "nodemon src/server.ts",
+    "start": "node build/server.js",
     "test": "npm run build && jasmine",
     "build": "npx tsc"
   },
