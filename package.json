@@ -2,7 +2,7 @@
   "name": "sakkeny-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "src/server.ts",
+  "main": "build/server.js",
   "engines": {
     "node": "18.12.1"
   },
