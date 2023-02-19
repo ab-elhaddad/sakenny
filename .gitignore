@@ -6,3 +6,4 @@ package-lock.json
 tsconfig.json
 .todo
 .gitignore
+deploy.zip

@@ -10,7 +10,8 @@
     "dev:start": "nodemon src/server.ts",
     "prod:start": "node --max-old-space-size=1536 --unhandled-rejections=strict build/server.js",
     "test": "npm run build && jasmine",
-    "dev:build": "npx tsc",
+    "zip": "powershell Compress-Archive -Path ./build,./migrations,./package.json,./README.md -DestinationPath ./deploy.zip",
+    "dev:build": "npx tsc && del deploy.zip && npm run zip",
     "prod:build": "npm i && npx db-migrate up"
   },
   "author": "",
