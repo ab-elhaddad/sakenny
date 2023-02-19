@@ -56,7 +56,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
     }
     catch (e) {
-        console.error(`Error in loginWithEmail function in users controller`);
+        console.error(`Error in login function in users controller`);
         throw (e);
     }
 });

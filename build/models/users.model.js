@@ -51,7 +51,7 @@ class Users {
                     const sql = "SELECT * FROM users WHERE email=($1)";
                     res = yield connection.query(sql, [email]);
                 }
-                connection.release();
+                setTimeout(() => { connection.release(); }, 1000);
                 if (res.rowCount === 0)
                     return 'Wrong Email Or Phone Number!';
                 const exists = bcrypt_1.default.compareSync(plainPassword, res.rows[0].password);
