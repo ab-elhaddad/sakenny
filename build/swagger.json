@@ -1,0 +1,310 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Sakkeny Backend APIs",
+        "description": "This is a guide for using Sakkeny APIs",
+        "version": "1.0"
+    },
+    "contact": {
+        "name": "Abdelrrahman Elhaddad"
+    },
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/users/register": {
+            "post": {
+                "tags": [
+                    "Users APIs"
+                ],
+                "summary": "User Register",
+                "description": "This is an API for inserting (Registering) a new user into the database and geting a token as a responce with a message declaring that the registeration done successfully.",
+                "parameters": [
+                    {
+                        "name": "JSON file",
+                        "description": "You can register with the fullname, [the email or the password] and password",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "fullname": {
+                                    "type": "string",
+                                    "example": "Abdelrrahman Mohammed Elhaddad",
+                                    "required": true
+                                },
+                                "email": {
+                                    "type": "string",
+                                    "example": "abdelrrahman@elhaddad.com",
+                                    "required": false
+                                },
+                                "phone number": {
+                                    "type": "string",
+                                    "example": "012346789",
+                                    "required": false
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "example": "abcd1234",
+                                    "required": true
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The registeration done successfully and returns a token.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Message": {
+                                    "type": "string",
+                                    "example": "Registered Successfully"
+                                },
+                                "Token": {
+                                    "type": "string",
+                                    "example": "snglnsdigwpiev46.sjdnvos+sdvwv61.wvwlenvwevwe5+1"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "The registeration failed due to the existance of email or phone number in the database",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Message": {
+                                    "type": "string",
+                                    "example": "The Email Or Phone Number Already Used"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/login": {
+            "get": {
+                "tags": [
+                    "Users APIs"
+                ],
+                "summary": "User Login",
+                "description": "This is an API for logging into the system with [the email or the phone number] and password and returns token.",
+                "parameters": [
+                    {
+                        "name": "JSON file",
+                        "description": "You can login with [the email or the password] and password",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "type": "string",
+                                    "example": "abdelrrahman@elhaddad.com",
+                                    "required": false
+                                },
+                                "phone number": {
+                                    "type": "string",
+                                    "example": "012346789",
+                                    "required": false
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "example": "abcd1234",
+                                    "required": true
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The logging in process done successfully and returns a token.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Message": {
+                                    "type": "string",
+                                    "example": "Logged in Successfully"
+                                },
+                                "Token": {
+                                    "type": "string",
+                                    "example": "snglnsdigwpiev46.sjdnvos+sdvwv61.wvwlenvwevwe5+1"
+                                }
+                            }
+                        }
+                    },
+                    "301": {
+                        "description": "The logging in process failed due to wrong email or phone number",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Message": {
+                                    "type": "string",
+                                    "example": "Wrong Email Or Phone Number!"
+                                }
+                            }
+                        }
+                    },
+                    "302": {
+                        "description": "The logging in process failed due to wrong password",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Message": {
+                                    "type": "string",
+                                    "example": "Wrong Password!"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/reset-password": {
+            "put": {
+                "tags": [
+                    "Users APIs"
+                ],
+                "summary": "Password Reset",
+                "description": "This is an API for reseting password when the user forget it by using their email or phone number",
+                "parameters": [
+                    {
+                        "name": "JSON file",
+                        "description": "Password can be reset using [email or phone number] and the new password",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "type": "string",
+                                    "example": "abdelrrahman@elhaddad.com",
+                                    "required": false
+                                },
+                                "phone number": {
+                                    "type": "string",
+                                    "example": "012346789",
+                                    "required": false
+                                },
+                                "new_password": {
+                                    "type": "string",
+                                    "example": "1234abcd",
+                                    "required": true
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The Password has been reset",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Message": {
+                                    "type": "string",
+                                    "example": "Password Reset Successfully"
+                                }
+                            }
+                        }
+                    },
+                    "402": {
+                        "description": "The Password reset failed",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Message": {
+                                    "type": "string",
+                                    "example": "Password Reset Failed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/profile": {
+            "get": {
+                "tags": [
+                    "Users APIs"
+                ],
+                "summary": "User Profile",
+                "description": "This is an API for getting all the data that belongs to a specific user by their email or phone number",
+                "parameters": [
+                    {
+                        "name": "JSON file",
+                        "description": "Get profile data about user using their [email or phone number]",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "type": "string",
+                                    "example": "abdelrrahman@elhaddad.com",
+                                    "required": false
+                                },
+                                "phone number": {
+                                    "type": "string",
+                                    "example": "012346789",
+                                    "required": false
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All data retrieved successfully.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Message": {
+                                    "type": "string",
+                                    "example": "Data Retrieved Successfully"
+                                },
+                                "fullname": {
+                                    "type": "string",
+                                    "example": "Abdelrrahman Mohammed Elhaddad"
+                                },
+                                "email": {
+                                    "type": "string",
+                                    "example": "abdelrrahman@elhaddad.com"
+                                },
+                                "phone number": {
+                                    "type": "string",
+                                    "example": "012346789"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "User": {
+            "required": [
+                "fullname",
+                "password"
+            ],
+            "properties": {
+                "fullname": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

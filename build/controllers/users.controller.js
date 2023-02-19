@@ -20,7 +20,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             phone_number: req.body.phone_number,
             password: req.body.password
         };
-        console.log(req.body.email, req.body.phone_number);
+        console.log(req, input);
         const result = yield users.register(input);
         if (result === "The Email Or Phone Number Already Used") {
             res.json({
@@ -43,10 +43,15 @@ exports.register = register;
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield users.login(req.body.email, req.body.phone_number, req.body.password);
-        if (result === 'Wrong Email Or Phone Number!' || result === 'Wrong Password!') {
+        if (result === 'Wrong Email Or Phone Number!') {
             res.json({
                 Message: result
-            }).status(401);
+            }).status(301);
+        }
+        else if (result === 'Wrong Password!') {
+            res.json({
+                Message: result
+            }).status(302);
         }
         else {
             res.json({
