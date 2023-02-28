@@ -5,7 +5,7 @@
   "main": "build/index.js",
   "scripts": {
     "dev:start": "nodemon src/index.ts",
-    "start": "node --max-old-space-size=1536 --unhandled-rejections=strict build/index.js",
+    "start": "node build/index.js",
     "test": "npm run build && jasmine",
     "zip": "powershell Compress-Archive -Path .\\build,.\\migrations,.\\package.json,.\\README.md,database.json -DestinationPath .\\deploy.zip",
     "zip:clean": "del deploy.zip || true",
