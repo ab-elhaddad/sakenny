@@ -10,7 +10,7 @@
     "zip": "powershell Compress-Archive -Path .\\build,.\\migrations,.\\package.json,.\\README.md,database.json -DestinationPath .\\deploy.zip",
     "clean": "del deploy.zip || true",
     "dev:build": "npx tsc && npm run clean && npm run zip",
-    "build": "npm i && npx db-migrate up"
+    "build": "npx db-migrate up"
   },
   "author": "",
   "license": "ISC",
