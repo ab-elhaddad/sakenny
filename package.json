@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "build/server.js",
-  "engines": {
-    "node": "18.0.0"
-  },
   "scripts": {
     "dev:start": "nodemon src/server.ts",
     "start": "node --max-old-space-size=1536 --unhandled-rejections=strict build/server.js",
