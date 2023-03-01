@@ -38,7 +38,7 @@
                                     "example": "abdelrrahman@elhaddad.com",
                                     "required": false
                                 },
-                                "phone number": {
+                                "phone_number": {
                                     "type": "string",
                                     "example": "012346789",
                                     "required": false
@@ -105,7 +105,7 @@
                                     "example": "abdelrrahman@elhaddad.com",
                                     "required": false
                                 },
-                                "phone number": {
+                                "phone_number": {
                                     "type": "string",
                                     "example": "012346789",
                                     "required": false
@@ -184,7 +184,7 @@
                                     "example": "abdelrrahman@elhaddad.com",
                                     "required": false
                                 },
-                                "phone number": {
+                                "phone_number": {
                                     "type": "string",
                                     "example": "012346789",
                                     "required": false
@@ -247,7 +247,7 @@
                                     "example": "abdelrrahman@elhaddad.com",
                                     "required": false
                                 },
-                                "phone number": {
+                                "phone_number": {
                                     "type": "string",
                                     "example": "012346789",
                                     "required": false
@@ -274,7 +274,7 @@
                                     "type": "string",
                                     "example": "abdelrrahman@elhaddad.com"
                                 },
-                                "phone number": {
+                                "phone_number": {
                                     "type": "string",
                                     "example": "012346789"
                                 }
