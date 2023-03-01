@@ -8,5 +8,5 @@ exports.client = new pg_1.Pool({
     host: config_1.config.host,
     user: config_1.config.user,
     password: config_1.config.password,
-    port: Number(config_1.config.port)
+    port: Number(config_1.config.db_port)
 });

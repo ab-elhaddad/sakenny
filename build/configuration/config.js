@@ -11,6 +11,7 @@ exports.config = {
     host: process.env.HOST,
     password: process.env.PASSWORD,
     port: process.env.PORT,
+    db_port: process.env.DB_PORT,
     user: process.env.USER,
     salt: Number(process.env.SALT),
     pepper: process.env.PEPPER,
