@@ -11,7 +11,7 @@ const swagger_json_1 = __importDefault(require("./swagger.json"));
 //import swaggerJSDoc from "swagger-jsdoc";
 //import { options } from './swaggerOptions';
 const app = (0, express_1.default)();
-const port = 3000;
+const port = 3000 || process.env.PORT;
 const address = `0.0.0.0:${port}`;
 //const swaggerSpec = swaggerJSDoc(options);
 //app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
@@ -19,7 +19,7 @@ app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.de
 app.use(body_parser_1.default.json());
 (0, main_router_1.mainRouter)(app);
 app.get('/', (_req, res) => {
-    res.send('Hello Sakkeny!');
+    res.send('Welcome to Sakkeny!');
 });
 app.listen(port, () => {
     console.log(`starting app on: ${address}`);
