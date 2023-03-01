@@ -12,6 +12,9 @@
         },
         "password": {
             "ENV": "PASSWORD"
+        },
+        "port": {
+            "ENV": "DB_PORT"
         }
     },
     "test": {

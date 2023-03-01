@@ -4,8 +4,7 @@
   "description": "",
   "main": "build/index.js",
   "scripts": {
-    "dev:start": "nodemon src/index.ts",
-    "start": "node build/index.js",
+    "start": "nodemon src/index.ts",
     "test": "npm run build && jasmine",
     "zip": "powershell Compress-Archive -Path .\\build,.\\migrations,.\\package.json,.\\README.md,database.json -DestinationPath .\\deploy.zip",
     "zip:clean": "del deploy.zip || true",
