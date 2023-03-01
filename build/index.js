@@ -13,10 +13,14 @@ const swagger_json_1 = __importDefault(require("./swagger.json"));
 const app = (0, express_1.default)();
 const port = 3000 || process.env.PORT;
 const address = `0.0.0.0:${port}`;
+let accessCount = 0;
 //const swaggerSpec = swaggerJSDoc(options);
 //app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_json_1.default));
 app.use(body_parser_1.default.json());
+app.use(() => {
+    console.log(accessCount++);
+});
 (0, main_router_1.mainRouter)(app);
 app.get('/', (_req, res) => {
     res.send('Welcome to Sakkeny!');
