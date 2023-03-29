@@ -283,6 +283,93 @@
                     }
                 }
             }
+        },
+        "/users/update": {
+            "get": {
+                "tags": [
+                    "Users APIs"
+                ],
+                "summary": "Update any information about the user [Requires Token]",
+                "description": "This is an API for updating any peice of information about the user (and return new token).\nNote: You can one ore more attribure.",
+                "parameters": [
+                    {
+                        "name": "JSON file",
+                        "description": "Update the fullname, email, and password of a user",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "new_fullname": {
+                                    "type": "string",
+                                    "example": "Abdelrrahman Elhaddad",
+                                    "required": false
+                                },
+                                "new_email": {
+                                    "type": "string",
+                                    "example": "abdelrrahman@elhaddad.com",
+                                    "required": false
+                                },
+                                "new_phone_number": {
+                                    "type": "string",
+                                    "example": "012346789",
+                                    "required": false
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "Bearer Token",
+                        "description": "Attach the user's token to verify that its this user information not someone else's information",
+                        "required": true,
+                        "in": "header",
+                        "type": "string"
+                    }
+                ],
+                "example": [
+                    {
+                        "new_fullname": "Elhaddad"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Data updated successfully.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Message": {
+                                    "type": "string",
+                                    "example": "Data updated successfully"
+                                },
+                                "Token": {
+                                    "type": "string",
+                                    "example": "xxxxx.xxxx.xxxxx"
+                                },
+                                "Flag": {
+                                    "type": "boolean",
+                                    "example": true
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "No Data Entered.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Message": {
+                                    "type": "string",
+                                    "example": "No Data Entered"
+                                },
+                                "Flag": {
+                                    "type": "boolean",
+                                    "example": false
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
