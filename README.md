@@ -9,7 +9,7 @@
 - #### You can find the documentation of all the APIs and how to use them [here](https://sakkeny.onrender.com/api-docs/). And for the full documentation of the whole project and its features [here](https://drive.google.com/file/d/138ADnx4zKEdunJ2MMos9pp5aP6m1Phle/view?usp=sharing).
 
 
-#### I am currently using th following in this project:
+#### I am currently using the following in this project:
 1. **Node.js** (As a runtime environment)
 2. **TypeScript** (As the Development language)
 3. **JavaScript** (As the Deployment language)
