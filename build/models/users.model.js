@@ -96,9 +96,10 @@ class Users {
     profile(email, phone_number) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const connection = (yield index_1.client.connect()).on('error', (e) => { console.log(e); });
+                const connection = (yield index_1.client.connect());
+                //.on('error', (e) => { console.log(e) });
                 let result;
-                if (email === undefined) {
+                if (phone_number) {
                     const sql = 'SELECT * FROM users WHERE phone_number=$1';
                     result = yield connection.query(sql, [phone_number]);
                 }
@@ -107,11 +108,60 @@ class Users {
                     result = yield connection.query(sql, [email]);
                 }
                 connection.release();
-                delete result.rows[0].password;
-                return result.rows[0];
+                if (result.rowCount > 0) {
+                    delete result.rows[0].password;
+                    delete result.rows[0].id;
+                    return result.rows[0];
+                }
+                else
+                    return null;
             }
             catch (e) {
-                console.error('Error in profile function in users.model');
+                console.error('Error in profile function in users.model', e);
+                throw e;
+            }
+        });
+    }
+    update(user, fullname, email, phone_number) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                //console.log(fullname);
+                const connection = yield index_1.client.connect();
+                // if the user wants to change the fullname
+                if (fullname) {
+                    const sql = "UPDATE users SET fullname=$1 WHERE email=$2 OR phone_number=$2 RETURNING *";
+                    const res = (yield connection.query(sql, [fullname, user]));
+                    const resFullname = res.rows[0].fullname;
+                    const resEmail = res.rows[0].email;
+                    const resPhone_number = res.rows[0].phone_number;
+                    if (resFullname === fullname)
+                        return ({ Message: "Fullname updated successfully", Token: jsonwebtoken_1.default.sign(!resEmail ? resPhone_number : resEmail, config_1.config.secret_key) });
+                    else
+                        return ({ Message: "Fullname update failed" });
+                }
+                // if the user wants to change the email
+                if (email) {
+                    const sql = "UPDATE users SET email=$1 WHERE email=$2 OR phone_number=$2 RETURNING email";
+                    const res = (yield connection.query(sql, [email, user])).rows[0].email;
+                    if (res === email)
+                        return ({ Message: "Email updated successfully", Token: jsonwebtoken_1.default.sign(email, config_1.config.secret_key) });
+                    else
+                        return ({ Message: "Email update failed" });
+                }
+                // if the user wants to change the email
+                if (phone_number) {
+                    const sql = "UPDATE users SET phone_number=$1 WHERE email=$2 OR phone_number=$2 RETURNING phone_number";
+                    const res = (yield connection.query(sql, [phone_number, user])).rows[0].phone_number;
+                    if (res === phone_number)
+                        return ({ Message: "Phone number updated successfully", Token: jsonwebtoken_1.default.sign(phone_number, config_1.config.secret_key) });
+                    else
+                        return ({ Message: "Phone number update failed" });
+                }
+                //returns if no condition was entered
+                return ({ Message: "No Data Entered" });
+            }
+            catch (e) {
+                console.log("Error in update function in users.model", e);
                 throw e;
             }
         });

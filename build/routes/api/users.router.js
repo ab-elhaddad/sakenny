@@ -9,7 +9,8 @@ const authenticate_middleware_1 = __importDefault(require("../../middlewares/aut
 const usersRouter = (app) => {
     app.post('/users/register', users_controller_1.register);
     app.get('/users/login', users_controller_1.login);
-    app.put('/users/reset-password', authenticate_middleware_1.default, users_controller_1.resetPassword);
+    app.put('/users/reset-password', users_controller_1.resetPassword);
     app.get('/users/profile', users_controller_1.profile);
+    app.get('/users/update', authenticate_middleware_1.default, users_controller_1.update);
 };
 exports.usersRouter = usersRouter;

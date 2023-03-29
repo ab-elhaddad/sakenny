@@ -1,8 +1,5 @@
 node_modules
-spec
-src
 .env
-tsconfig.json
 .todo
 .gitignore
 deploy.zip

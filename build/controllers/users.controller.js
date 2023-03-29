@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.profile = exports.resetPassword = exports.login = exports.register = void 0;
+exports.update = exports.profile = exports.resetPassword = exports.login = exports.register = void 0;
 const users_model_1 = require("../models/users.model");
 const users = new users_model_1.Users();
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -24,12 +24,14 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const result = yield users.register(input);
         if (result === "The Email Or Phone Number Already Used") {
             res.json({
-                Message: result
+                Message: result,
+                Flag: false
             }).status(401);
         }
         else {
             res.json({
                 Message: 'Registered Successfully',
+                Flag: true,
                 Token: result
             });
         }
@@ -45,17 +47,20 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const result = yield users.login(req.body.email, req.body.phone_number, req.body.password);
         if (result === 'Wrong Email Or Phone Number!') {
             res.json({
-                Message: result
-            }).status(301);
+                Message: result,
+                Flag: false,
+            }).status(401);
         }
         else if (result === 'Wrong Password!') {
             res.json({
-                Message: result
-            }).status(302);
+                Message: result,
+                Flag: false
+            }).status(403);
         }
         else {
             res.json({
                 Message: "Logged in Successfully",
+                Flag: true,
                 Token: result
             });
         }
@@ -69,9 +74,10 @@ exports.login = login;
 const resetPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield users.resetPassword(req.body.email, req.body.phone_number, req.body.new_password);
-        res.json({ Message: result });
         if (result === 'Password Reset Failed')
-            res.status(402);
+            res.json({ Message: result, Flag: false }).status(401);
+        else
+            res.json({ Message: result, Flag: true });
     }
     catch (e) {
         console.error('Error in resetPassword function in users.controller');
@@ -80,7 +86,33 @@ const resetPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.resetPassword = resetPassword;
 const profile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield users.profile(req.body.email, req.body.phone_number);
-    res.json(Object.assign({ Message: 'Data Retrieved Successfully' }, result));
+    try {
+        const result = yield users.profile(req.body.email, req.body.phone_number);
+        if (!result) {
+            res.json({
+                Message: 'Wrong email or phone number',
+                Flag: false,
+            }).status(401);
+        }
+        else {
+            res.json(Object.assign({ Message: 'Data Retrieved Successfully', Flag: true }, result));
+        }
+    }
+    catch (e) {
+        console.log("Error in profile function in users.controller", e);
+    }
 });
 exports.profile = profile;
+const update = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield users.update(res.locals.user, req.body.new_fullname, req.body.new_email, req.body.new_phone_number);
+        if (!result.Message.includes("successfully")) // Not Successfully
+            res.json({ Message: result.Message, Flag: false }).status(403);
+        else
+            res.json(Object.assign(Object.assign({}, result), { Flag: true }));
+    }
+    catch (e) {
+        console.log("Error in update function in users.controller", e);
+    }
+});
+exports.update = update;
