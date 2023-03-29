@@ -290,7 +290,7 @@
                     "Users APIs"
                 ],
                 "summary": "Update any information about the user [Requires Token]",
-                "description": "This is an API for updating any peice of information about the user (and return new token).\nNote: You can one ore more attribure.",
+                "description": "This is an API for updating any peice of information about the user (and return new token).\nNote: You can update one or more attributes.",
                 "parameters": [
                     {
                         "name": "JSON file",
