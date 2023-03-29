@@ -65,6 +65,10 @@
                                 "Token": {
                                     "type": "string",
                                     "example": "snglnsdigwpiev46.sjdnvos+sdvwv61.wvwlenvwevwe5+1"
+                                },
+                                "Flag": {
+                                    "type": "boolean",
+                                    "example": true
                                 }
                             }
                         }
@@ -77,6 +81,10 @@
                                 "Message": {
                                     "type": "string",
                                     "example": "The Email Or Phone Number Already Used"
+                                },
+                                "Flag": {
+                                    "type": "boolean",
+                                    "example": false
                                 }
                             }
                         }
@@ -132,6 +140,10 @@
                                 "Token": {
                                     "type": "string",
                                     "example": "snglnsdigwpiev46.sjdnvos+sdvwv61.wvwlenvwevwe5+1"
+                                },
+                                "Flag": {
+                                    "type": "boolean",
+                                    "example": true
                                 }
                             }
                         }
@@ -144,6 +156,10 @@
                                 "Message": {
                                     "type": "string",
                                     "example": "Wrong Email Or Phone Number!"
+                                },
+                                "Flag": {
+                                    "type": "boolean",
+                                    "example": false
                                 }
                             }
                         }
@@ -207,6 +223,10 @@
                                 "Message": {
                                     "type": "string",
                                     "example": "Password Reset Successfully"
+                                },
+                                "Flag": {
+                                    "type": "boolean",
+                                    "example": true
                                 }
                             }
                         }
@@ -219,6 +239,10 @@
                                 "Message": {
                                     "type": "string",
                                     "example": "Password Reset Failed"
+                                },
+                                "Flag": {
+                                    "type": "boolean",
+                                    "example": false
                                 }
                             }
                         }
@@ -277,6 +301,10 @@
                                 "phone_number": {
                                     "type": "string",
                                     "example": "012346789"
+                                },
+                                "Flag": {
+                                    "type": "boolean",
+                                    "example": true
                                 }
                             }
                         }
@@ -324,11 +352,6 @@
                         "required": true,
                         "in": "header",
                         "type": "string"
-                    }
-                ],
-                "example": [
-                    {
-                        "new_fullname": "Elhaddad"
                     }
                 ],
                 "responses": {
