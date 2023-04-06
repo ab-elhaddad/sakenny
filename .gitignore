@@ -4,6 +4,8 @@ node_modules
 .gitignore
 deploy.zip
 www
+inf.txt
+.gitignore
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
