@@ -1,10 +1,10 @@
 node_modules
 .env
 .todo
-.gitignore
 deploy.zip
 www
 inf.txt
+ssl
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml

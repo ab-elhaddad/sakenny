@@ -12,4 +12,5 @@ export const config = {
     salt: Number(process.env.SALT),
     pepper: process.env.PEPPER,
     secret_key: process.env.SECRET_KEY as string,
+    ssl:process.env.SSLMODE
 }
