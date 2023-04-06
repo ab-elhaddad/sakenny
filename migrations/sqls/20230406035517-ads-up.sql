@@ -7,8 +7,8 @@ CREATE TABLE IF NOT EXISTS ads
     price REAL NOT NULL,
     city VARCHAR(20) NOT NULL,
     address VARCHAR(100) NOT NULL,
-    lat VARCHAR(255), //Latitude
-    lng VARCHAR(255), //Longtitude
+    lat VARCHAR(255), 
+    lng VARCHAR(255), 
     gender BOOLEAN NOT NULL,
     services TEXT[],
     price_per VARCHAR(5) NOT NULL
