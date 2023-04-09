@@ -2,6 +2,8 @@ import express from 'express';
 import { Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import { mainRouter } from './routes/main.router';
+import multer from 'multer';
+import { fileStorage } from './multer/config';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './swagger.json';
 //import swaggerJSDoc from "swagger-jsdoc";
@@ -12,6 +14,12 @@ const port = 3000 || process.env.PORT;
 const address = `0.0.0.0:${port}`;
 
 //app.use(morgan("common"));
+
+// multer middleware to handle form-data requests
+// store images in images directory and add text data to rea.body
+app.use(
+    multer({ storage: fileStorage }).array('image', 5)
+);
 
 //const swaggerSpec = swaggerJSDoc(options);
 //app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
