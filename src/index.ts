@@ -11,12 +11,6 @@ const app: express.Application = express();
 const port = 3000 || process.env.PORT;
 const address = `0.0.0.0:${port}`;
 
-// let accessCount = 1;
-// app.use((req: Request, res: Response, next: NextFunction) => {
-//     console.log(accessCount++);
-//     next();
-// });
-
 //app.use(morgan("common"));
 
 //const swaggerSpec = swaggerJSDoc(options);
