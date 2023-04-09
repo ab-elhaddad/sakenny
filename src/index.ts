@@ -18,7 +18,7 @@ const address = `0.0.0.0:${port}`;
 // multer middleware to handle form-data requests
 // store images in images directory and add text data to rea.body
 app.use(
-    multer({ storage: fileStorage }).array('image', 5)
+    multer({ storage: fileStorage }).array('images', 5)
 );
 
 //const swaggerSpec = swaggerJSDoc(options);
