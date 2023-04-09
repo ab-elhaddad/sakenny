@@ -3,5 +3,5 @@ export type User = {
     email?: string,
     phone_number?: string,
     password: string,
-    profile_pic: string,
+    profile_pic?: string,
 };
