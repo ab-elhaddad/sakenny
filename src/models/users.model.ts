@@ -24,11 +24,13 @@ export class Users {
 
             const sql = "INSERT INTO users (fullname, email, phone_number, password, profile_pic) VALUES ($1, $2, $3, $4, $5) RETURNING *";
 
+            //Getting hashed password to be stored in db
             const hashedPassword = bcrypt.hashSync(input.password, config.salt);
 
             const res = await connection.query(sql, [input.fullname, input.email, input.phone_number, hashedPassword, url]);
-
             connection.release();
+
+            //Returning token geerated by email or phone number
             return jwt.sign(res.rows[0].email === null ? res.rows[0].phone_number : res.rows[0].email, config.secret_key);
         }
         catch (e) {
