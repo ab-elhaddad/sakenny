@@ -1,11 +1,12 @@
 import c from 'cloudinary';
+import { config } from '../configuration/config';
 const cloudinary = c.v2;
 
 // Configuration 
 cloudinary.config({
-    cloud_name: "dlyguoemz",
-    api_key: "394176944959173",
-    api_secret: "Lpt4bLh9bOOc34fl1xybN3wfY3E"
+    cloud_name: config.cloudinairy_cloud_name,
+    api_key: config.cloudinairy_api_key,
+    api_secret: config.cloudinairy_api_secret
 });
 
 // Export

@@ -21,6 +21,10 @@ export const config = {
     db_port_dev: process.env.DB_PORT_DEV,
     user_dev: process.env.USER_DEV,
 
+    cloudinairy_cloud_name: process.env.CLOUDINAIRY_CLOUD_NAME,
+    cloudinairy_api_key: process.env.CLOUDINAIRY_API_KEY,
+    cloudinairy_api_secret: process.env.CLOUDINAIRY_API_SECRET,
+
     port: process.env.PORT,
     salt: Number(process.env.SALT),
     pepper: process.env.PEPPER,
