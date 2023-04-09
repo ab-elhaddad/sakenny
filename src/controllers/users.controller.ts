@@ -10,9 +10,10 @@ export const register = async (req: express.Request, res: express.Response): Pro
             fullname: req.body.fullname,
             email: req.body.email,
             phone_number: req.body.phone_number,
-            password: req.body.password
+            password: req.body.password,
+            profile_pic: req.files ? req.files[0].path : undefined
         };
-        console.log(req, input);
+        console.log(input);
         const result = await users.register(input);
 
         if (result === "The Email Or Phone Number Already Used") {
