@@ -1,5 +1,5 @@
 {
-    "dev": {
+    "prod": {
         "driver": "pg",
         "host": {
             "ENV": "HOST"
@@ -20,16 +20,37 @@
     "test": {
         "driver": "pg",
         "host": {
-            "ENV": "HOST"
+            "ENV": "HOST_TEST"
         },
         "database": {
-            "ENV": "TEST_DATABASE"
+            "ENV": "DATABASE_TEST"
         },
         "user": {
-            "ENV": "USER"
+            "ENV": "USER_TEST"
         },
         "password": {
-            "ENV": "PASSWORD"
+            "ENV": "PASSWORD_TEST"
+        },
+        "port": {
+            "ENV": "DB_PORT_TEST"
+        }
+    },
+    "dev": {
+        "driver": "pg",
+        "host": {
+            "ENV": "HOST_DEV"
+        },
+        "database": {
+            "ENV": "DATABASE_DEV"
+        },
+        "user": {
+            "ENV": "USER_DEV"
+        },
+        "password": {
+            "ENV": "PASSWORD_DEV"
+        },
+        "port": {
+            "ENV": "DB_PORT_DEV"
         }
     }
 }
