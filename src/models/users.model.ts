@@ -1,4 +1,4 @@
-import { client } from './../database/index';
+import client from './../database/index';
 import { User } from '../types/User.type';
 import bcrypt from 'bcrypt';
 import { config } from '../configuration/config';
@@ -10,6 +10,7 @@ export class Users {
         try {
             const connection = (await client.connect()).on('error', (e) => { console.log(e) });
 
+            //Check Whether There exist account with the same email or phone number
             const testSQL = input.email !== undefined ? "SELECT * FROM users WHERE email=$1" : "SELECT * FROM users WHERE phone_number=$1";
             const testRes = await connection.query(testSQL, [input.email !== undefined ? input.email : input.phone_number]);
             if (testRes.rowCount > 0)
