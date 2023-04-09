@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction, Router } from 'express';
 import JWT from 'jsonwebtoken';
 import { config } from '../configuration/config';
-import { client } from '../database';
+import client from '../database';
 
 const authenticate = express.Router();
 
