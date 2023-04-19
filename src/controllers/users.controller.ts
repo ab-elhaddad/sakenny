@@ -103,7 +103,7 @@ export const profile = async (req: express.Request, res: express.Response): Prom
 
 export const update = async (req: express.Request, res: express.Response): Promise<void> => {
     try {
-        const result = await users.update(res.locals.user, req.body.new_fullname, req.body.new_email, req.body.new_phone_number);
+        const result = await users.update(res.locals.user, req.body.new_fullname, req.body.new_email, req.body.new_phone_number, req.files ? req.files[0].path : undefined);
         if (!result.Message.includes("successfully")) // Not Successfully
             res.json({ Message: result.Message, Flag: false }).status(403);
         else
@@ -111,5 +111,18 @@ export const update = async (req: express.Request, res: express.Response): Promi
     }
     catch (e) {
         console.log("Error in update function in users.controller", e);
+    }
+}
+
+export const updatePassword = async (req: express.Request, res: express.Response): Promise<void> => {
+    try {
+        const result = await users.updatePassword(res.locals.user, req.body.old_password, req.body.new_password);
+        if (result.includes('successfully'))
+            res.json({ Message: result, Flag: true })
+        else
+            res.json({ Message: result, Flag: false }).status(404);
+    } catch (e) {
+        console.log('Error in updatePassword in users.controller');
+        throw e;
     }
 }

@@ -182,4 +182,29 @@ export class Users {
             throw e;
         }
     }
+
+    async updatePassword(user: string, oldPassword: string, newPassword: string): Promise<string> {
+        try {// Getting the row associated with the passed email or phone number
+            let sql = 'SELECT * FROM users WHERE email=$1 OR phone_number=$1';
+            const row = (await client.query(sql, [user])).rows[0];
+
+            // Making sure the entered old password is true
+            const isPasswordCorrect = bcrypt.compareSync(oldPassword, row.password);
+            if (!isPasswordCorrect)
+                return 'Wrong Password';
+
+            // Hashing the new password and storing it in the database
+            const hashedPassword = bcrypt.hashSync(newPassword, config.salt);
+            sql = 'UPDATE users SET password=$1 WHERE email=$2 OR phone_number=$2 RETURNING password';
+            const res = await client.query(sql, [hashedPassword, user]);
+
+            if (bcrypt.compareSync(res.rows[0], newPassword))
+                return 'Password Updated Successfully';
+            else
+                return 'Password Update Failed';
+        } catch (e) {
+            console.log('Error in updatePassword function in users.model');
+            throw e;
+        }
+    }
 };
