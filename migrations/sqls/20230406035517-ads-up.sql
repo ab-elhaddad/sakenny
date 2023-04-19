@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS ads
 (
     id SERIAL PRIMARY KEY,
     users_id INTEGER REFERENCES users(id),
-    title VARCHAR(50),
+    title VARCHAR(50) NOT NULL,
     space_type VARCHAR(4) NOT NULL,
     description VARCHAR(500),
     price REAL NOT NULL,
