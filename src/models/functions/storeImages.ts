@@ -1,4 +1,4 @@
-import cloudinary from '../cloudinairy/config';
+import cloudinary from '../../cloudinairy/config';
 
 const storeImages = async (images: string[], folder: string): Promise<string[]> => {
     let urls: string[] = [];

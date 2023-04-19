@@ -3,7 +3,7 @@ import { User } from '../types/User.type';
 import bcrypt from 'bcrypt';
 import { config } from '../configuration/config';
 import jwt from 'jsonwebtoken';
-import storeImages from './storeImages';
+import storeImages from './functions/storeImages';
 
 export class Users {
 
