@@ -12,5 +12,6 @@ CREATE TABLE IF NOT EXISTS ads
     lng VARCHAR(255), 
     gender BOOLEAN NOT NULL,
     services TEXT[],
+    pics TEXT[],
     price_per VARCHAR(5) NOT NULL
 );
