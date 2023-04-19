@@ -98,7 +98,7 @@ export class Users {
     async profile(email: string, phone_number: string): Promise<User | null> {
         try {
             const connection = (await client.connect())
-            //.on('error', (e) => { console.log(e) });
+
             let result;
             if (phone_number) {
                 const sql = 'SELECT * FROM users WHERE phone_number=$1';
@@ -124,7 +124,7 @@ export class Users {
         }
     }
 
-    async update(user: string, fullname?: string, email?: string, phone_number?: string) {
+    async update(user: string, fullname?: string, email?: string, phone_number?: string, profile_pic?: string) {
         try {
             //console.log(fullname);
             const connection = await client.connect();
@@ -162,6 +162,16 @@ export class Users {
                     return ({ Message: "Phone number updated successfully", Token: jwt.sign(phone_number as string, config.secret_key) });
                 else
                     return ({ Message: "Phone number update failed" });
+            }
+
+            if (profile_pic) {
+                const url = await storeImages([profile_pic], 'Profile Images')[0];
+                const sql = "UPDATE users SET profile_pic=$1 WHERE email=$2 OR phone_number=$2 RETURNING profile_pic";
+                const res = await connection.query(sql, [url, user]);
+                if (res === url)
+                    return ({ Message: "Profile Picture updated successfully", Token: jwt.sign(user, config.secret_key) });
+                else
+                    return ({ Message: "Profile Picture update failed" });
             }
 
             //returns if no condition was entered
