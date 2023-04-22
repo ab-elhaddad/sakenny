@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction, Router } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import JWT from 'jsonwebtoken';
 import { config } from '../configuration/config';
 import client from '../database';

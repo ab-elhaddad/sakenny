@@ -17,16 +17,14 @@ export class Users {
             if (testRes.rowCount > 0)
                 return "The Email Or Phone Number Already Used";
 
+            //Getting hashed password to be stored in db
+            const hashedPassword = bcrypt.hashSync(input.password, config.salt);
+
             //Uploading profile picture to cloudinairy and getting the link
-            let url: string | undefined;
-            if (input.profile_pic)
-                url = await storeImages([input.profile_pic], 'Profile Images')[0];
+            const url = await storeImages(input.profile_pic ? [input.profile_pic] : [], 'Profile Images')[0];
             console.log(url)
 
             const sql = "INSERT INTO users (fullname, email, phone_number, password, profile_pic) VALUES ($1, $2, $3, $4, $5) RETURNING *";
-
-            //Getting hashed password to be stored in db
-            const hashedPassword = bcrypt.hashSync(input.password, config.salt);
 
             const res = await connection.query(sql, [input.fullname, input.email, input.phone_number, hashedPassword, url]);
             connection.release();
