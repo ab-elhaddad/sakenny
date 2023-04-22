@@ -21,6 +21,7 @@ export class Users {
             let url: string | undefined;
             if (input.profile_pic)
                 url = await storeImages([input.profile_pic], 'Profile Images')[0];
+            console.log(url)
 
             const sql = "INSERT INTO users (fullname, email, phone_number, password, profile_pic) VALUES ($1, $2, $3, $4, $5) RETURNING *";
 
@@ -184,7 +185,8 @@ export class Users {
     }
 
     async updatePassword(user: string, oldPassword: string, newPassword: string): Promise<string> {
-        try {// Getting the row associated with the passed email or phone number
+        try {
+            // Getting the row associated with the passed email or phone number
             let sql = 'SELECT * FROM users WHERE email=$1 OR phone_number=$1';
             const row = (await client.query(sql, [user])).rows[0];
 
@@ -198,7 +200,8 @@ export class Users {
             sql = 'UPDATE users SET password=$1 WHERE email=$2 OR phone_number=$2 RETURNING password';
             const res = await client.query(sql, [hashedPassword, user]);
 
-            if (bcrypt.compareSync(res.rows[0], newPassword))
+            const changed = bcrypt.compareSync(newPassword, res.rows[0].password);
+            if (changed)
                 return 'Password Updated Successfully';
             else
                 return 'Password Update Failed';

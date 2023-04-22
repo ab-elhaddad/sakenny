@@ -116,8 +116,9 @@ export const update = async (req: express.Request, res: express.Response): Promi
 
 export const updatePassword = async (req: express.Request, res: express.Response): Promise<void> => {
     try {
+        console.log(res.locals.user, req.body.old_password, req.body.new_password);
         const result = await users.updatePassword(res.locals.user, req.body.old_password, req.body.new_password);
-        if (result.includes('successfully'))
+        if (result.includes('Successfully'))
             res.json({ Message: result, Flag: true })
         else
             res.json({ Message: result, Flag: false }).status(404);
