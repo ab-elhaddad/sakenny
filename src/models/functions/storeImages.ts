@@ -1,4 +1,5 @@
 import cloudinary from '../../cloudinairy/config';
+import fs from 'fs';
 
 const storeImages = async (images: string[], folder: string): Promise<string[]> => {
     let urls: string[] = [];
@@ -17,6 +18,7 @@ const storeImages = async (images: string[], folder: string): Promise<string[]> 
         }
 
         const res = await cloudinary.uploader.upload(image, options);
+        fs.rmSync(image);
 
         console.log(res);
         urls.push(res.secure_url);
