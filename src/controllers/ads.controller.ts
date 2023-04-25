@@ -6,7 +6,7 @@ const ads = new Ads();
 export const getAll = async (_req: express.Request, res: express.Response) => {
     try {
         const result = await ads.getAll();
-        res.json({ Message: 'Data retrieved successfully', Flag: true, ...result });
+        res.json({ Message: 'Data retrieved successfully', Flag: true, Data: result });
     }
     catch (e) {
         console.log('Error in getAll function in ads.controller');

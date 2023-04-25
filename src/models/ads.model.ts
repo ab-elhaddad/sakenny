@@ -14,7 +14,7 @@ class Ads {
             const sql = 'SELECT * FROM ads';
             const res = await connection.query(sql);
             connection.release();
-            return res;
+            return res.rows;
         } catch (e) {
             console.log('Error in getAll function in ads.model');
             throw e;
