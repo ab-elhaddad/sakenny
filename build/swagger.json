@@ -348,7 +348,7 @@
                     },
                     {
                         "name": "Bearer Token",
-                        "description": "Attach the user's token to verify that its this user information not someone else's information",
+                        "description": "Attach the user's token to verify that its their user information not someone else's information",
                         "required": true,
                         "in": "header",
                         "type": "string"
@@ -383,6 +383,79 @@
                                 "Message": {
                                     "type": "string",
                                     "example": "No Data Entered"
+                                },
+                                "Flag": {
+                                    "type": "boolean",
+                                    "example": false
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/update-password": {
+            "get": {
+                "tags": [
+                    "Users APIs"
+                ],
+                "summary": "Update the password by entering the old password and the new password [Requires Token]",
+                "description": "This is an API for updating the user's password by entering their old password and their new password",
+                "parameters": [
+                    {
+                        "name": "JSON file",
+                        "description": "Old Password and New Password",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "old_password": {
+                                    "type": "string",
+                                    "example": "abc123",
+                                    "required": true
+                                },
+                                "new_password": {
+                                    "type": "string",
+                                    "example": "def456",
+                                    "required": true
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "Bearer Token",
+                        "description": "Attach the user's token to verify that its their password they want to change not someone else's password",
+                        "required": true,
+                        "in": "header",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password Updated Successfully",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Message": {
+                                    "type": "string",
+                                    "example": "Password Updated Successfully"
+                                },
+                                "Flag": {
+                                    "type": "boolean",
+                                    "example": true
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Password Update Failed",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Message": {
+                                    "type": "string",
+                                    "example": "Password Update Failed"
                                 },
                                 "Flag": {
                                     "type": "boolean",
