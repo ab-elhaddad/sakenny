@@ -11,7 +11,8 @@
     "www:clean": "del www || true",
     "dev:build": "npx tsc && npm run zip:clean && npm run www:clean && npm run zip",
     "build": "npx db-migrate up",
-    "start:test": "set ENV=test&& nodemon src/index.ts"
+    "start:test": "set ENV=test&& nodemon src/index.ts",
+    "start:prod": "set ENV=prod&& nodemon src/index.ts"
   },
   "author": "",
   "license": "ISC",
