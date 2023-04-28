@@ -40,7 +40,7 @@ class Users {
                 return jsonwebtoken_1.default.sign(res.rows[0].email === null ? res.rows[0].phone_number : res.rows[0].email, config_1.config.secret_key);
             }
             catch (e) {
-                console.error(`Error in Register function in users.model function`);
+                console.error(`Error in register function in users.model function`);
                 throw (e);
             }
         });

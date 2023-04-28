@@ -33,7 +33,7 @@ export class Users {
             return jwt.sign(res.rows[0].email === null ? res.rows[0].phone_number : res.rows[0].email, config.secret_key);
         }
         catch (e) {
-            console.error(`Error in Register function in users.model function`);
+            console.error(`Error in register function in users.model function`);
             throw (e);
         }
     }
