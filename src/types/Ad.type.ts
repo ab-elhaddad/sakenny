@@ -1,6 +1,4 @@
 type Ad = {
-    id: number,
-    users_id: number,
     title: string,
     space_type: string,
     description?: string,
