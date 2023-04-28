@@ -26,7 +26,7 @@ app.get('/', (_req, res) => {
     res.send('Welcome to Sakkeny!');
 });
 app.use((_req, res) => {
-    res.json({ Message: "I'm sorry, There is no such endpoint" }).send("I'm sorry, There is no such endpoint");
+    res.json({ Message: "I'm sorry, There is no such endpoint" });
 });
 app.listen(port, () => {
     console.log(`starting app on: ${address}`);

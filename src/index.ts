@@ -34,7 +34,7 @@ app.get('/', (_req: Request, res: Response): void => {
 });
 
 app.use((_req: Request, res: Response): void => {
-    res.json({ Message: "I'm sorry, There is no such endpoint" }).send("I'm sorry, There is no such endpoint");
+    res.json({ Message: "I'm sorry, There is no such endpoint" });
 })
 
 app.listen(port, (): void => {
