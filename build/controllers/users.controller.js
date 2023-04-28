@@ -124,7 +124,7 @@ const updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
         if (result.includes('Successfully'))
             res.json({ Message: result, Flag: true });
         else
-            res.json({ Message: result, Flag: false }).status(404);
+            res.json({ Message: result, Flag: false }).status(403);
     }
     catch (e) {
         console.log('Error in updatePassword in users.controller');
