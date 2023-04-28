@@ -7,13 +7,28 @@ exports.config = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 exports.config = {
-    database: process.env.DATABASE,
-    host: process.env.HOST,
-    password: process.env.PASSWORD,
+    database_prod: process.env.DATABASE_PROD,
+    host_prod: process.env.HOST_PROD,
+    password_prod: process.env.PASSWORD_PROD,
+    db_port_prod: process.env.DB_PORT_PROD,
+    user_prod: process.env.USER_PROD,
+    database_test: process.env.DATABASE_TEST,
+    host_test: process.env.HOST_TEST,
+    password_test: process.env.PASSWORD_TEST,
+    db_port_test: process.env.DB_PORT_TEST,
+    user_test: process.env.USER_TEST,
+    database_dev: process.env.DATABASE_DEV,
+    host_dev: process.env.HOST_DEV,
+    password_dev: process.env.PASSWORD_DEV,
+    db_port_dev: process.env.DB_PORT_DEV,
+    user_dev: process.env.USER_DEV,
+    cloudinairy_cloud_name: process.env.CLOUDINAIRY_CLOUD_NAME,
+    cloudinairy_api_key: process.env.CLOUDINAIRY_API_KEY,
+    cloudinairy_api_secret: process.env.CLOUDINAIRY_API_SECRET,
     port: process.env.PORT,
-    db_port: process.env.DB_PORT,
-    user: process.env.USER,
     salt: Number(process.env.SALT),
     pepper: process.env.PEPPER,
     secret_key: process.env.SECRET_KEY,
+    ssl: process.env.SSLMODE,
+    ENV: process.env.ENV
 };

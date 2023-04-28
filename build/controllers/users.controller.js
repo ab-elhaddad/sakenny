@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.update = exports.profile = exports.resetPassword = exports.login = exports.register = void 0;
+exports.updatePassword = exports.update = exports.profile = exports.resetPassword = exports.login = exports.register = void 0;
 const users_model_1 = require("../models/users.model");
 const users = new users_model_1.Users();
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -18,9 +18,10 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             fullname: req.body.fullname,
             email: req.body.email,
             phone_number: req.body.phone_number,
-            password: req.body.password
+            password: req.body.password,
+            profile_pic: req.files ? req.files[0].path : undefined
         };
-        console.log(req, input);
+        console.log(input);
         const result = yield users.register(input);
         if (result === "The Email Or Phone Number Already Used") {
             res.json({
@@ -105,7 +106,7 @@ const profile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.profile = profile;
 const update = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield users.update(res.locals.user, req.body.new_fullname, req.body.new_email, req.body.new_phone_number);
+        const result = yield users.update(res.locals.user, req.body.new_fullname, req.body.new_email, req.body.new_phone_number, req.files ? req.files[0].path : undefined);
         if (!result.Message.includes("successfully")) // Not Successfully
             res.json({ Message: result.Message, Flag: false }).status(403);
         else
@@ -116,3 +117,18 @@ const update = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.update = update;
+const updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log(res.locals.user, req.body.old_password, req.body.new_password);
+        const result = yield users.updatePassword(res.locals.user, req.body.old_password, req.body.new_password);
+        if (result.includes('Successfully'))
+            res.json({ Message: result, Flag: true });
+        else
+            res.json({ Message: result, Flag: false }).status(404);
+    }
+    catch (e) {
+        console.log('Error in updatePassword in users.controller');
+        throw e;
+    }
+});
+exports.updatePassword = updatePassword;

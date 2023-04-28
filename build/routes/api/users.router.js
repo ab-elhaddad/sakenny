@@ -11,6 +11,7 @@ const usersRouter = (app) => {
     app.get('/users/login', users_controller_1.login);
     app.put('/users/reset-password', users_controller_1.resetPassword);
     app.get('/users/profile', users_controller_1.profile);
-    app.get('/users/update', authenticate_middleware_1.default, users_controller_1.update);
+    app.put('/users/update', authenticate_middleware_1.default, users_controller_1.update);
+    app.put('/users/update-password', authenticate_middleware_1.default, users_controller_1.updatePassword);
 };
 exports.usersRouter = usersRouter;

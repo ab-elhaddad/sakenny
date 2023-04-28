@@ -13,23 +13,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Users = void 0;
-const index_1 = require("./../database/index");
+const index_1 = __importDefault(require("./../database/index"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const config_1 = require("../configuration/config");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const storeImages_1 = __importDefault(require("./functions/storeImages"));
 class Users {
     register(input) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const connection = (yield index_1.client.connect()).on('error', (e) => { console.log(e); });
+                const connection = (yield index_1.default.connect()).on('error', (e) => { console.log(e); });
+                //Check Whether There exist account with the same email or phone number
                 const testSQL = input.email !== undefined ? "SELECT * FROM users WHERE email=$1" : "SELECT * FROM users WHERE phone_number=$1";
                 const testRes = yield connection.query(testSQL, [input.email !== undefined ? input.email : input.phone_number]);
                 if (testRes.rowCount > 0)
                     return "The Email Or Phone Number Already Used";
-                const sql = "INSERT INTO users (fullname, email, phone_number, password) VALUES ($1, $2, $3, $4) RETURNING *";
+                //Getting hashed password to be stored in db
                 const hashedPassword = bcrypt_1.default.hashSync(input.password, config_1.config.salt);
-                const res = yield connection.query(sql, [input.fullname, input.email, input.phone_number, hashedPassword]);
+                //Uploading profile picture to cloudinairy and getting the link
+                const url = yield (0, storeImages_1.default)(input.profile_pic ? [input.profile_pic] : [], 'Profile Images')[0];
+                console.log(url);
+                const sql = "INSERT INTO users (fullname, email, phone_number, password, profile_pic) VALUES ($1, $2, $3, $4, $5) RETURNING *";
+                const res = yield connection.query(sql, [input.fullname, input.email, input.phone_number, hashedPassword, url]);
                 connection.release();
+                //Returning token geerated by email or phone number
                 return jsonwebtoken_1.default.sign(res.rows[0].email === null ? res.rows[0].phone_number : res.rows[0].email, config_1.config.secret_key);
             }
             catch (e) {
@@ -41,7 +48,7 @@ class Users {
     login(email, phone_number, plainPassword) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const connection = (yield index_1.client.connect()).on('error', (e) => { console.log(e); });
+                const connection = (yield index_1.default.connect()).on('error', (e) => { console.log(e); });
                 let res;
                 if (email === undefined) {
                     const sql = "SELECT * FROM users WHERE phone_number=($1)";
@@ -69,7 +76,7 @@ class Users {
     resetPassword(email, phone_number, new_password) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const connection = (yield index_1.client.connect()).on('error', (e) => { console.log(e); });
+                const connection = (yield index_1.default.connect()).on('error', (e) => { console.log(e); });
                 const newHashedPassword = bcrypt_1.default.hashSync(new_password, config_1.config.salt);
                 let result;
                 if (email === undefined) {
@@ -96,8 +103,7 @@ class Users {
     profile(email, phone_number) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const connection = (yield index_1.client.connect());
-                //.on('error', (e) => { console.log(e) });
+                const connection = (yield index_1.default.connect());
                 let result;
                 if (phone_number) {
                     const sql = 'SELECT * FROM users WHERE phone_number=$1';
@@ -110,7 +116,6 @@ class Users {
                 connection.release();
                 if (result.rowCount > 0) {
                     delete result.rows[0].password;
-                    delete result.rows[0].id;
                     return result.rows[0];
                 }
                 else
@@ -122,11 +127,11 @@ class Users {
             }
         });
     }
-    update(user, fullname, email, phone_number) {
+    update(user, fullname, email, phone_number, profile_pic) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 //console.log(fullname);
-                const connection = yield index_1.client.connect();
+                const connection = yield index_1.default.connect();
                 // if the user wants to change the fullname
                 if (fullname) {
                     const sql = "UPDATE users SET fullname=$1 WHERE email=$2 OR phone_number=$2 RETURNING *";
@@ -157,11 +162,46 @@ class Users {
                     else
                         return ({ Message: "Phone number update failed" });
                 }
+                if (profile_pic) {
+                    const url = yield (0, storeImages_1.default)([profile_pic], 'Profile Images')[0];
+                    const sql = "UPDATE users SET profile_pic=$1 WHERE email=$2 OR phone_number=$2 RETURNING profile_pic";
+                    const res = yield connection.query(sql, [url, user]);
+                    if (res === url)
+                        return ({ Message: "Profile Picture updated successfully", Token: jsonwebtoken_1.default.sign(user, config_1.config.secret_key) });
+                    else
+                        return ({ Message: "Profile Picture update failed" });
+                }
                 //returns if no condition was entered
                 return ({ Message: "No Data Entered" });
             }
             catch (e) {
                 console.log("Error in update function in users.model", e);
+                throw e;
+            }
+        });
+    }
+    updatePassword(user, oldPassword, newPassword) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // Getting the row associated with the passed email or phone number
+                let sql = 'SELECT * FROM users WHERE email=$1 OR phone_number=$1';
+                const row = (yield index_1.default.query(sql, [user])).rows[0];
+                // Making sure the entered old password is true
+                const isPasswordCorrect = bcrypt_1.default.compareSync(oldPassword, row.password);
+                if (!isPasswordCorrect)
+                    return 'Wrong Password';
+                // Hashing the new password and storing it in the database
+                const hashedPassword = bcrypt_1.default.hashSync(newPassword, config_1.config.salt);
+                sql = 'UPDATE users SET password=$1 WHERE email=$2 OR phone_number=$2 RETURNING password';
+                const res = yield index_1.default.query(sql, [hashedPassword, user]);
+                const changed = bcrypt_1.default.compareSync(newPassword, res.rows[0].password);
+                if (changed)
+                    return 'Password Updated Successfully';
+                else
+                    return 'Password Update Failed';
+            }
+            catch (e) {
+                console.log('Error in updatePassword function in users.model');
                 throw e;
             }
         });
