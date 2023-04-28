@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js --unhandled-rejections=strict",
+    "start": "set ENV=prod&&node index.js",
     "build": "npm install"
   },
   "author": "",
