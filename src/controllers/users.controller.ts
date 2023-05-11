@@ -7,10 +7,10 @@ const users = new Users();
 export const register = async (req: express.Request, res: express.Response): Promise<void> => {
     try {
         const input: User = {
-            fullname: req.body.fullname,
-            email: req.body.email,
-            phone_number: req.body.phone_number,
-            password: req.body.password,
+            fullname: await req.body.fullname,
+            email: await req.body.email,
+            phone_number: await req.body.phone_number,
+            password: await req.body.password,
             profile_pic: req.files ? req.files[0].path : undefined
         };
         console.log(input);
