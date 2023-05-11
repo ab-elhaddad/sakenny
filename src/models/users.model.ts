@@ -1,6 +1,6 @@
 import client from './../database/index';
 import { User } from '../types/User.type';
-import bcrypt from 'bcrypt';
+import bcrypt, { hash } from 'bcrypt';
 import { config } from '../configuration/config';
 import jwt from 'jsonwebtoken';
 import storeImages from './functions/storeImages';
@@ -18,7 +18,7 @@ export class Users {
                 return "The Email Or Phone Number Already Used";
 
             //Getting hashed password to be stored in db
-            const hashedPassword = bcrypt.hashSync(input.password, config.salt);
+            const hashedPassword = bcrypt.hashSync(input.password, config.salt | 10);
 
             //Uploading profile picture to cloudinairy and getting the link
             const url = await storeImages(input.profile_pic ? [input.profile_pic] : [], 'Profile Images')[0];
