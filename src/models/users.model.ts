@@ -18,7 +18,7 @@ export class Users {
                 return "The Email Or Phone Number Already Used";
 
             //Getting hashed password to be stored in db
-            const hashedPassword = bcrypt.hashSync(input.password, 10);
+            //const hashedPassword = bcrypt.hashSync(input.password, config.salt | 10);
 
             //Uploading profile picture to cloudinairy and getting the link
             const url = await storeImages(input.profile_pic ? [input.profile_pic] : [], 'Profile Images')[0];
@@ -26,7 +26,7 @@ export class Users {
 
             const sql = "INSERT INTO users (fullname, email, phone_number, password, profile_pic) VALUES ($1, $2, $3, $4, $5) RETURNING *";
 
-            const res = await connection.query(sql, [input.fullname, input.email, input.phone_number, hashedPassword, url]);
+            const res = await connection.query(sql, [input.fullname, input.email, input.phone_number, input.password, url]);
             connection.release();
 
             //Returning token geerated by email or phone number
