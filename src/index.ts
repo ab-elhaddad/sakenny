@@ -21,6 +21,13 @@ app.use(
     multer({ storage: fileStorage }).array('images', 5)
 );
 
+// Switch data sent in form-data requests to req.body
+// const upload = multer();
+// app.use(upload.any(), (req, res, next) => {
+//     console.log(req.body); // the form data sent in the request
+//     next();
+// });
+
 //const swaggerSpec = swaggerJSDoc(options);
 //app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
