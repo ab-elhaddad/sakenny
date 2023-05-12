@@ -313,7 +313,7 @@
             }
         },
         "/users/update": {
-            "get": {
+            "put": {
                 "tags": [
                     "Users APIs"
                 ],
@@ -395,7 +395,7 @@
             }
         },
         "/users/update-password": {
-            "get": {
+            "put": {
                 "tags": [
                     "Users APIs"
                 ],
