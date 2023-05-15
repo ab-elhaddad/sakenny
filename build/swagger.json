@@ -93,7 +93,7 @@
             }
         },
         "/users/login": {
-            "get": {
+            "post": {
                 "tags": [
                     "Users APIs"
                 ],
@@ -251,7 +251,7 @@
             }
         },
         "/users/profile": {
-            "get": {
+            "post": {
                 "tags": [
                     "Users APIs"
                 ],
