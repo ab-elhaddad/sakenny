@@ -15,12 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = require("../configuration/config");
-const database_1 = __importDefault(require("../database"));
+const index_1 = __importDefault(require("../database/index"));
 const authenticate = express_1.default.Router();
 const exists = (user) => __awaiter(void 0, void 0, void 0, function* () {
-    const connection = yield database_1.default.connect();
+    const connection = yield index_1.default.connect();
     const sql = "SELECT * FROM users WHERE email=$1 OR phone_number=$1";
     const result = yield connection.query(sql, [user]);
+    connection.release();
     return result.rowCount > 0;
 });
 authenticate.use((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {

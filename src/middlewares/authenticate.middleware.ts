@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import JWT from 'jsonwebtoken';
 import { config } from '../configuration/config';
-import client from '../database';
+import client from '../database/index';
 
 const authenticate = express.Router();
 
@@ -9,6 +9,7 @@ const exists = async (user: string): Promise<boolean> => {
     const connection = await client.connect();
     const sql = "SELECT * FROM users WHERE email=$1 OR phone_number=$1";
     const result = await connection.query(sql, [user]);
+    connection.release();
 
     return result.rowCount > 0;
 }
