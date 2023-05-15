@@ -116,6 +116,7 @@ class Users {
                 connection.release();
                 if (result.rowCount > 0) {
                     delete result.rows[0].password;
+                    delete result.rows[0].id;
                     return result.rows[0];
                 }
                 else
