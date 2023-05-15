@@ -35,6 +35,7 @@ authenticate.use((req, res, next) => __awaiter(void 0, void 0, void 0, function*
     }
     catch (e) {
         res.json({ Message: 'Invalid Token' }).status(403);
+        throw e;
     }
 }));
 exports.default = authenticate;

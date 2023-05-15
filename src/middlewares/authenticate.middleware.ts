@@ -28,6 +28,7 @@ authenticate.use(async (req: Request, res: Response, next: NextFunction) => {
     }
     catch (e) {
         res.json({ Message: 'Invalid Token' }).status(403);
+        throw e;
     }
 });
 
