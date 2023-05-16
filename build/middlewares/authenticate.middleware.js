@@ -29,19 +29,18 @@ authenticate.use((req, res, next) => __awaiter(void 0, void 0, void 0, function*
         const enteredToken = req.headers.authorization;
         // Check if the token are attached or not (undefined or has a value)
         if (!enteredToken)
-            res.json({ Message: 'You have to attach a token' }).status(301);
+            return res.json({ Message: 'You have to attach a token' }).status(301);
         console.log(enteredToken);
         //const rawToken = enteredToken.substring(enteredToken.indexOf(' ') + 1);
         const rawToken = enteredToken.split(' ')[1];
         res.locals.user = jsonwebtoken_1.default.verify(rawToken, config_1.config.secret_key);
         if (!(yield exists(res.locals.user)))
-            res.json({ Message: 'Invalid Token [Old Token]' }).status(403);
+            return res.json({ Message: 'Invalid Token [Old Token]' }).status(403);
         next();
     }
     catch (e) {
-        res.json({ Message: 'Invalid Token' }).status(403);
-        console.log('Error in authenticate middleware\n', e);
-        //throw e;
+        return res.json({ Message: 'Invalid Token' }).status(403);
+        //console.log('Error in authenticate middleware', e);
     }
 }));
 exports.default = authenticate;
