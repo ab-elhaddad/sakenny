@@ -157,10 +157,11 @@ class Users {
                         return ({ Message: "Phone number update failed" });
                 }
                 if (profile_pic) {
-                    const url = yield (0, storeImages_1.default)([profile_pic], 'Profile Images')[0];
+                    const urls = yield (0, storeImages_1.default)([profile_pic], 'Profile Images');
+                    const url = urls[0];
                     const sql = "UPDATE users SET profile_pic=$1 WHERE email=$2 OR phone_number=$2 RETURNING profile_pic";
                     const res = yield connection.query(sql, [url, user]);
-                    if (res === url)
+                    if (res.rows[0].profile_pic === url)
                         return ({ Message: "Profile Picture updated successfully", Token: jsonwebtoken_1.default.sign(user, config_1.config.secret_key) });
                     else
                         return ({ Message: "Profile Picture update failed" });

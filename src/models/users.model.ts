@@ -157,10 +157,13 @@ export class Users {
             }
 
             if (profile_pic) {
-                const url = await storeImages([profile_pic], 'Profile Images')[0];
+                const urls = await storeImages([profile_pic], 'Profile Images');
+
+                const url = urls[0];
                 const sql = "UPDATE users SET profile_pic=$1 WHERE email=$2 OR phone_number=$2 RETURNING profile_pic";
                 const res = await connection.query(sql, [url, user]);
-                if (res === url)
+
+                if (res.rows[0].profile_pic === url)
                     return ({ Message: "Profile Picture updated successfully", Token: jwt.sign(user, config.secret_key) });
                 else
                     return ({ Message: "Profile Picture update failed" });
