@@ -30,7 +30,6 @@ authenticate.use((req, res, next) => __awaiter(void 0, void 0, void 0, function*
         // Check if the token are attached or not (undefined or has a value)
         if (!enteredToken)
             return res.json({ Message: 'You have to attach a token' }).status(301);
-        console.log(enteredToken);
         //const rawToken = enteredToken.substring(enteredToken.indexOf(' ') + 1);
         const rawToken = enteredToken.split(' ')[1];
         res.locals.user = jsonwebtoken_1.default.verify(rawToken, config_1.config.secret_key);
