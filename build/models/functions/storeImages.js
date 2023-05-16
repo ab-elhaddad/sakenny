@@ -32,7 +32,7 @@ const storeImages = (images, folder) => __awaiter(void 0, void 0, void 0, functi
         };
         const res = yield config_1.default.uploader.upload(image, options);
         fs_1.default.rmSync(image);
-        console.log(res);
+        //console.log(res);
         urls.push(res.secure_url);
     }
     return urls;

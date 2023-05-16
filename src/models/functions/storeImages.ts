@@ -22,7 +22,7 @@ const storeImages = async (images: string[], folder: string): Promise<string[]> 
         const res = await cloudinary.uploader.upload(image, options);
         fs.rmSync(image);
 
-        console.log(res);
+        //console.log(res);
         urls.push(res.secure_url);
     }
 
