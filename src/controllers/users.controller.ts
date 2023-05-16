@@ -81,7 +81,7 @@ export const resetPassword = async (req: express.Request, res: express.Response)
 
 export const profile = async (req: express.Request, res: express.Response): Promise<void> => {
     try {
-        const result = await users.profile(req.body.email, req.body.phone_number);
+        const result = await users.profile(res.locals.user);
         if (!result) {
             res.json({
                 Message: 'Wrong email or phone number',

@@ -88,7 +88,7 @@ const resetPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 exports.resetPassword = resetPassword;
 const profile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield users.profile(req.body.email, req.body.phone_number);
+        const result = yield users.profile(res.locals.user);
         if (!result) {
             res.json({
                 Message: 'Wrong email or phone number',

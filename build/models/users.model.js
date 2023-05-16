@@ -100,19 +100,12 @@ class Users {
             }
         });
     }
-    profile(email, phone_number) {
+    profile(user) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const connection = (yield index_1.default.connect());
-                let result;
-                if (phone_number) {
-                    const sql = 'SELECT * FROM users WHERE phone_number=$1';
-                    result = yield connection.query(sql, [phone_number]);
-                }
-                else {
-                    const sql = 'SELECT * FROM users WHERE email=$1';
-                    result = yield connection.query(sql, [email]);
-                }
+                const sql = "SELECT * FROM users WHERE email=($1) OR phone_number=($1)";
+                const result = yield connection.query(sql, [user]);
                 connection.release();
                 if (result.rowCount > 0) {
                     delete result.rows[0].password;

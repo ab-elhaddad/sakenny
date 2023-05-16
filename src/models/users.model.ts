@@ -94,19 +94,12 @@ export class Users {
         }
     }
 
-    async profile(email: string, phone_number: string): Promise<User | null> {
+    async profile(user: string): Promise<User | null> {
         try {
             const connection = (await client.connect())
 
-            let result;
-            if (phone_number) {
-                const sql = 'SELECT * FROM users WHERE phone_number=$1';
-                result = await connection.query(sql, [phone_number]);
-            }
-            else {
-                const sql = 'SELECT * FROM users WHERE email=$1';
-                result = await connection.query(sql, [email]);
-            }
+            const sql = "SELECT * FROM users WHERE email=($1) OR phone_number=($1)";
+            const result = await connection.query(sql, [user]);
             connection.release();
 
             if (result.rowCount > 0) {

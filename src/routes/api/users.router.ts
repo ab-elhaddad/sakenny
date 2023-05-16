@@ -6,7 +6,7 @@ export const usersRouter = (app: express.Application): void => {
     app.post('/users/register', register);
     app.post('/users/login', login);
     app.put('/users/reset-password', resetPassword);
-    app.post('/users/profile', profile);
+    app.get('/users/profile', authenticate, profile);
     app.put('/users/update', authenticate, update);
     app.put('/users/update-password', authenticate, updatePassword);
 }
