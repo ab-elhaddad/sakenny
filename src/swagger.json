@@ -305,6 +305,10 @@
                                 "Flag": {
                                     "type": "boolean",
                                     "example": true
+                                },
+                                "profile_pic": {
+                                    "type": "string",
+                                    "example": "https://__________.com"
                                 }
                             }
                         }
