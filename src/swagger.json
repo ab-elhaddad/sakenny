@@ -322,11 +322,11 @@
                     "Users APIs"
                 ],
                 "summary": "Update any information about the user [Requires Token]",
-                "description": "This is an API for updating any peice of information about the user (and return new token).\nNote: You can update one or more attributes.",
+                "description": "This is an API for updating any peice of information about the user (and returning new token).\nNote: You have to update exactly one attribute a time.",
                 "parameters": [
                     {
                         "name": "JSON file",
-                        "description": "Update the fullname, email, and password of a user",
+                        "description": "Update the fullname, email, or password of a user",
                         "required": true,
                         "in": "body",
                         "schema": {
