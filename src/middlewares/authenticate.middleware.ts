@@ -17,6 +17,11 @@ const exists = async (user: string): Promise<boolean> => {
 authenticate.use(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const enteredToken = req.headers.authorization as string;
+
+        // Check if the token are attached or not (undefined or has a value)
+        if (!enteredToken)
+            res.json({ Message: 'You have to attach a token' }).status(301);
+        console.log(enteredToken);
         //const rawToken = enteredToken.substring(enteredToken.indexOf(' ') + 1);
         const rawToken = enteredToken.split(' ')[1];
 
@@ -29,7 +34,8 @@ authenticate.use(async (req: Request, res: Response, next: NextFunction) => {
     }
     catch (e) {
         res.json({ Message: 'Invalid Token' }).status(403);
-        throw e;
+        console.log('Error in authenticate middleware\n', e);
+        //throw e;
     }
 });
 
