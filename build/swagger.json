@@ -251,7 +251,7 @@
             }
         },
         "/users/profile": {
-            "post": {
+            "get": {
                 "tags": [
                     "Users APIs"
                 ],
@@ -259,25 +259,11 @@
                 "description": "This is an API for getting all the data that belongs to a specific user by their email or phone number",
                 "parameters": [
                     {
-                        "name": "JSON file",
-                        "description": "Get profile data about user using their [email or phone number]",
+                        "name": "Bearer Token",
+                        "description": "Attach the user's token to verify that its their information not someone else's information",
                         "required": true,
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "email": {
-                                    "type": "string",
-                                    "example": "abdelrrahman@elhaddad.com",
-                                    "required": false
-                                },
-                                "phone_number": {
-                                    "type": "string",
-                                    "example": "012346789",
-                                    "required": false
-                                }
-                            }
-                        }
+                        "in": "header",
+                        "type": "string"
                     }
                 ],
                 "responses": {
