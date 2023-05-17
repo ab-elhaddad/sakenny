@@ -13,7 +13,7 @@ export const register = async (req: express.Request, res: express.Response): Pro
             password: req.body.password,
             profile_pic: req.files ? req.files[0].path : undefined
         };
-        console.log(input);
+        //console.log(input);
         const result = await users.register(input);
 
         if (result === "The Email Or Phone Number Already Used") {

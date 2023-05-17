@@ -21,7 +21,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             password: req.body.password,
             profile_pic: req.files ? req.files[0].path : undefined
         };
-        console.log(input);
+        //console.log(input);
         const result = yield users.register(input);
         if (result === "The Email Or Phone Number Already Used") {
             res.json({
