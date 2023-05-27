@@ -3,7 +3,7 @@ import { User } from '../types/User.type';
 import bcrypt, { hash } from 'bcrypt';
 import { config } from '../configuration/config';
 import jwt from 'jsonwebtoken';
-import storeImages from './functions/storeImages';
+import uploadImages from '../controllers/functions/uploadImages';
 
 export class Users {
 
@@ -21,7 +21,7 @@ export class Users {
             const hashedPassword = bcrypt.hashSync(input.password, config.salt);
 
             //Uploading profile picture to cloudinairy and getting the link
-            const url = await storeImages(input.profile_pic ? [input.profile_pic] : [], 'Profile Images')[0];
+            const url = await uploadImages(input.profile_pic ? [input.profile_pic] : [], 'Profile Images')[0];
             console.log(url)
 
             const sql = "INSERT INTO users (fullname, email, phone_number, password, profile_pic) VALUES ($1, $2, $3, $4, $5) RETURNING *";
@@ -157,13 +157,10 @@ export class Users {
             }
 
             if (profile_pic) {
-                const urls = await storeImages([profile_pic], 'Profile Images');
-
-                const url = urls[0];
                 const sql = "UPDATE users SET profile_pic=$1 WHERE email=$2 OR phone_number=$2 RETURNING profile_pic";
-                const res = await connection.query(sql, [url, user]);
+                const res = await connection.query(sql, [profile_pic, user]);
 
-                if (res.rows[0].profile_pic === url)
+                if (res.rows[0].profile_pic === profile_pic)
                     return ({ Message: "Profile Picture updated successfully", Token: jwt.sign(user, config.secret_key) });
                 else
                     return ({ Message: "Profile Picture update failed" });

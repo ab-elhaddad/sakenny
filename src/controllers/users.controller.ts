@@ -1,6 +1,7 @@
 import { User } from "../types/User.type";
 import { Users } from "../models/users.model";
 import express from 'express';
+import uploadImages from "./functions/uploadImages";
 
 const users = new Users();
 
@@ -103,7 +104,12 @@ export const profile = async (req: express.Request, res: express.Response): Prom
 
 export const update = async (req: express.Request, res: express.Response): Promise<void> => {
     try {
-        const result = await users.update(res.locals.user, req.body.new_fullname, req.body.new_email, req.body.new_phone_number, req.files ? req.files[0].path : undefined);
+        // Check whether the desired update in profile pic to upload it
+        let profile_pic: any;
+        if (req.files) profile_pic = (await uploadImages(req.files, 'Profile Images'))[0];
+
+        const result = await users.update(res.locals.user, req.body.new_fullname, req.body.new_email, req.body.new_phone_number, profile_pic);
+
         if (!result.Message.includes("successfully")) // Not Successfully
             res.json({ Message: result.Message, Flag: false }).status(403);
         else
