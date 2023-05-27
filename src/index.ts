@@ -15,19 +15,6 @@ const address = `0.0.0.0:${port}`;
 
 //app.use(morgan("common"));
 
-// multer middleware to handle form-data requests
-// store images in images directory and add text data to rea.body
-app.use(
-    multer({ storage: fileStorage }).array('images', 5)
-);
-
-// Switch data sent in form-data requests to req.body
-// const upload = multer();
-// app.use(upload.any(), (req, res, next) => {
-//     console.log(req.body); // the form data sent in the request
-//     next();
-// });
-
 //const swaggerSpec = swaggerJSDoc(options);
 //app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
