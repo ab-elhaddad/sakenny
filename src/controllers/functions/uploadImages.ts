@@ -1,9 +1,9 @@
 import cloudinary from '../../cloudinairy/config';
 import fs from 'fs';
 
-const storeImages = async (images: string[], folder: string): Promise<string[]> => {
+const uploadImages = async (images, folder: string): Promise<string[]> => {
     if (images.length === 0)
-        return images;
+        return [];
     let urls: string[] = [];
 
     for (const image of images) {
@@ -19,8 +19,8 @@ const storeImages = async (images: string[], folder: string): Promise<string[]> 
             ]
         }
 
-        const res = await cloudinary.uploader.upload(image, options);
-        fs.rm(image, (err) => {
+        const res = await cloudinary.uploader.upload(image.path, options);
+        fs.rm(image.path, (err) => {
             console.log(err);
             return;
         })
@@ -32,4 +32,4 @@ const storeImages = async (images: string[], folder: string): Promise<string[]> 
     return urls;
 }
 
-export default storeImages;
+export default uploadImages;
