@@ -16,16 +16,20 @@ class Ads {
             const sql = 'INSERT INTO ads (user_id, title, space_type, description, price, city, governorate, lat, lng, gender, price_per, email, phone_number, features, terms) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10 ,$11 ,$12, $13, ($14::bit(3)), ($15::bit(3))) RETURNING *';
             const res = await connection.query(sql, [id, ad.title, ad.space_type, ad.description, ad.price, ad.city, ad.governorate, ad.lat, ad.lng, ad.gender, ad.price_per, ad.email, ad.phone_number, ad.features, ad.terms]);
 
-            // Inserting images in ad_images and getting the inserted rows
+            // Inserting images in ad_images
             const ad_id = res.rows[0].id;
-            let imagesRes: any[] = [];
-            for (let i = 0; ad.images && i < ad.images.length; i++) {
-                const url: string = ad.images ? ad.images[i] : "";
-                const description = ad.images_description ? ad.images_description[i] : "";
-                const sql = 'INSERT INTO ad_images (ad_id, url, description) VALUES ($1, $2, $3) RETURNING *'
-                const res = await connection.query(sql, [ad_id, url, description]);
-                imagesRes.push(res);
+            let urlSQL = 'INSERT INTO ad_images (ad_id, url, description) VALUES '
+            let values: any = []; // To store all the values will be inserted in the query
+            let counter = 1; // To count the number of the inserted vriable
+            for (let i = 0; ad.images_description && ad.images && i < ad.images.length; i++) {
+                values.push(ad_id, ad.images[i], ad.images_description[i]);
+                // Concatinating the whole query
+                let row = `($${counter++},$${counter++},$${counter++})`;
+                if (i != ad.images.length - 1) row += ',';
+                urlSQL += row
             }
+            // Executing one query to insert all ad images
+            await connection.query(urlSQL, values);
 
             connection.release();
 
