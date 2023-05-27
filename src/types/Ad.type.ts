@@ -1,16 +1,22 @@
 type Ad = {
+    id?: number,
+    user_id?: number,
     title: string,
     space_type: string,
     description?: string,
     price: number,
     city: string,
-    address: string,
+    governorate: string,
     lat?: string,
     lng?: string,
     gender: boolean,
-    services?: string[],
-    pics?: string[],
-    price_per: string
+    email?: string,
+    phone_number: string,
+    features?: string,
+    terms?: string,
+    price_per: string,
+    images?: string[],
+    images_description?: string[] | null
 }
 
 export default Ad;
