@@ -1,11 +1,14 @@
+import { config } from "../configuration/config";
 import multer from "multer";
-import path from 'path';
 
 export const fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'images/');
+        if (config.ENV === 'dev' || config.ENV === 'test')
+            cb(null, 'src/images/');
+        else
+            cb(null, './images/');
     },
-    filename: (req, file, cb) => {
+    filename: (_req, file, cb) => {
         //console.log(file);
         cb(null, Date.now() + '-' + file.originalname);
     }
