@@ -40,8 +40,10 @@ class Ads {
                     urlSQL += row;
                 }
                 console.log(urlSQL);
+                console.log(ad.images_description, ad.images);
                 // Executing one query to insert all ad images
-                yield connection.query(urlSQL, values);
+                if (ad.images, length > 0)
+                    yield connection.query(urlSQL, values);
                 // Checking whether the ad is inserted
                 if (res.rowCount === 0)
                     return { Message: 'Ad insertion failed', Flag: false };

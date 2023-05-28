@@ -28,8 +28,10 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
                 urlSQL += row
             }
             console.log(urlSQL);
+            console.log(ad.images_description, ad.images);
             // Executing one query to insert all ad images
-            await connection.query(urlSQL, values);
+            if (ad.images, length > 0)
+                await connection.query(urlSQL, values);
 
             // Checking whether the ad is inserted
             if (res.rowCount === 0)
