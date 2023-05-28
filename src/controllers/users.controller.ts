@@ -106,6 +106,7 @@ export const update = async (req: express.Request, res: express.Response): Promi
     try {
         // Check whether the desired update in profile pic to upload it
         let profile_pic: any;
+        console.log(req.files);
         if (req.files) profile_pic = (await uploadImages(req.files, 'Profile Images'))[0];
 
         const result = await users.update(res.locals.user, req.body.new_fullname, req.body.new_email, req.body.new_phone_number, profile_pic);

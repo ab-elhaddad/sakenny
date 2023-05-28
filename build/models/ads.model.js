@@ -42,7 +42,7 @@ class Ads {
                 console.log(urlSQL);
                 console.log(ad.images_description, ad.images);
                 // Executing one query to insert all ad images
-                if (ad.images, length > 0)
+                if (ad.images && ad.images.length > 0)
                     yield connection.query(urlSQL, values);
                 // Checking whether the ad is inserted
                 if (res.rowCount === 0)
