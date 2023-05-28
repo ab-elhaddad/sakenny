@@ -8,6 +8,7 @@ const config_1 = require("../configuration/config");
 const multer_1 = __importDefault(require("multer"));
 exports.fileStorage = multer_1.default.diskStorage({
     destination: (req, file, cb) => {
+        console.log(config_1.config.ENV);
         if (config_1.config.ENV === 'dev' || config_1.config.ENV === 'test')
             cb(null, 'src/images/');
         else
