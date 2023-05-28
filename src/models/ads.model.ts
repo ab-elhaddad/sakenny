@@ -1,4 +1,4 @@
-import client from "../database";
+import client from "../database/index";
 import Ad from "../types/Ad.type";
 
 class Ads { // Create - Search - Update - getAll(Home) - getOne

@@ -12,14 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const database_1 = __importDefault(require("../database"));
+const index_1 = __importDefault(require("../database/index"));
 class Ads {
     // TODO
     // - return created ads
     create(user, ad) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const connection = yield database_1.default.connect();
+                const connection = yield index_1.default.connect();
                 // Getting user id to for the ad
                 const idSQL = 'SELECT id from users WHERE email=$1 or phone_number=$1';
                 const id = (yield connection.query(idSQL, [user])).rows[0].id;
@@ -57,7 +57,7 @@ class Ads {
     }
     search() {
         return __awaiter(this, void 0, void 0, function* () {
-            const connection = yield database_1.default.connect();
+            const connection = yield index_1.default.connect();
             const number = 2;
             const num = '110';
             const binaryNumber = number.toString(2);
@@ -75,7 +75,7 @@ class Ads {
     getAll() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const connection = yield database_1.default.connect();
+                const connection = yield index_1.default.connect();
                 const sql = 'SELECT * FROM ads';
                 const res = yield connection.query(sql);
                 connection.release();
@@ -90,7 +90,7 @@ class Ads {
     get(ad_id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const connection = yield database_1.default.connect();
+                const connection = yield index_1.default.connect();
                 const sql1 = 'SELECT * FROM ads WHERE id=($1)'; // Ad details
                 const sql2 = 'SELECT * FROM ad_images WHERE ad_id=($1)'; // Ad images
                 let details = (yield connection.query(sql1, [ad_id]));
