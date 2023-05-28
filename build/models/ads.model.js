@@ -98,6 +98,7 @@ class Ads {
                     return { Message: "No such ad with the provided id", Flag: false };
                 details = details.rows[0];
                 const images = (yield connection.query(sql2, [ad_id])).rows;
+                connection.release();
                 return { Message: "Ad retrived successfully", Flag: true, ad: Object.assign(Object.assign({}, details), { images }) };
             }
             catch (e) {
