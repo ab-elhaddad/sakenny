@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS ads
     lat VARCHAR(255), 
     lng VARCHAR(255), 
     gender BOOLEAN NOT NULL,
-    features BIT(3),
-    terms BIT(3),
+    features BIT(20),
+    terms BIT(10),
     price_per VARCHAR(5) NOT NULL,
     email VARCHAR(100),
     phone_number VARCHAR(20) NOT NULL
