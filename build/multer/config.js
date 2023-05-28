@@ -9,7 +9,7 @@ const multer_1 = __importDefault(require("multer"));
 exports.fileStorage = multer_1.default.diskStorage({
     destination: (req, file, cb) => {
         if (config_1.config.ENV === 'prod')
-            cb(null, '/images');
+            cb(null, 'images/');
         else
             cb(null, 'src/images/');
     },
