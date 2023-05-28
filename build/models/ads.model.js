@@ -39,7 +39,7 @@ class Ads {
                         row += ',';
                     urlSQL += row;
                 }
-                console.log('Before getting images urls');
+                console.log(urlSQL);
                 // Executing one query to insert all ad images
                 yield connection.query(urlSQL, values);
                 // Checking whether the ad is inserted
