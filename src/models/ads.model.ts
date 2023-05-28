@@ -4,7 +4,7 @@ import Ad from "../types/Ad.type";
 class Ads { // Create - Search - Update - getAll(Home) - getOne
     // TODO
     // - return created ads
-    async create(user: string, ad: Ad): Promise<string> {
+    async create(user: string, ad: Ad): Promise<any> {
         try {
             const connection = await client.connect();
             // Getting user id to for the ad
@@ -30,13 +30,15 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
             // Executing one query to insert all ad images
             await connection.query(urlSQL, values);
 
-            connection.release();
-
             // Checking whether the ad is inserted
             if (res.rowCount === 0)
-                return 'Ad insertion failed';
+                return { Message: 'Ad insertion failed', Flag: false };
 
-            return 'Ad inserted successfully';
+            const insertedAd = await this.get(res.rows[0].id);
+            insertedAd.Message = 'Ad inserted successfully';
+            return insertedAd;
+
+            connection.release();
         }
         catch (e) {
             console.log('Error in create function in ads.model\n');

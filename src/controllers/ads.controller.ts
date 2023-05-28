@@ -19,7 +19,7 @@ export const getAll = async (_req: express.Request, res: express.Response) => {
     }
 }
 
-// DONE :)
+// return created ad
 export const create = async (req: express.Request, res: express.Response) => {
     try {
         // Converting features and terms to bitset (e.g 01101)
@@ -49,10 +49,10 @@ export const create = async (req: express.Request, res: express.Response) => {
         }
 
         const result = await ads.create(res.locals.user, ad);
-        if (result.includes('successfully'))
-            res.json({ Message: result, Flag: true });
+        if (result.Message.includes('successfully'))
+            res.json(result);
         else
-            res.json({ Message: result, Flag: false }).status(301);
+            res.json(result).status(301);
     } catch (e) {
         console.log('Error in create function in ads.controller');
         throw e;
