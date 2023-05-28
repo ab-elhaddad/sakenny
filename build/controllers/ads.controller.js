@@ -33,6 +33,7 @@ exports.getAll = getAll;
 // return created ad
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log(req.files);
         // Converting features and terms to bitset (e.g 01101)
         const features = (0, encryptFeatures_1.default)((req.body.features ? req.body.features : "").split('-'));
         const terms = (0, encryptTerms_1.default)((req.body.terms ? req.body.terms : "").split('-'));

@@ -112,7 +112,6 @@ const update = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Check whether the desired update in profile pic to upload it
         let profile_pic;
-        console.log(req.files);
         if (req.files)
             profile_pic = (yield (0, uploadImages_1.default)(req.files, 'Profile Images'))[0];
         const result = yield users.update(res.locals.user, req.body.new_fullname, req.body.new_email, req.body.new_phone_number, profile_pic);

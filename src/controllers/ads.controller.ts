@@ -22,6 +22,7 @@ export const getAll = async (_req: express.Request, res: express.Response) => {
 // return created ad
 export const create = async (req: express.Request, res: express.Response) => {
     try {
+        console.log(req.files);
         // Converting features and terms to bitset (e.g 01101)
         const features = encryptFeatues((req.body.features ? req.body.features : "").split('-'));
         const terms = encryptTerms((req.body.terms ? req.body.terms : "").split('-'));
