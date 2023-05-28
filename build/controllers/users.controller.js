@@ -8,9 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updatePassword = exports.update = exports.profile = exports.resetPassword = exports.login = exports.register = void 0;
 const users_model_1 = require("../models/users.model");
+const uploadImages_1 = __importDefault(require("./functions/uploadImages"));
 const users = new users_model_1.Users();
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -106,7 +110,11 @@ const profile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.profile = profile;
 const update = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield users.update(res.locals.user, req.body.new_fullname, req.body.new_email, req.body.new_phone_number, req.files ? req.files[0].path : undefined);
+        // Check whether the desired update in profile pic to upload it
+        let profile_pic;
+        if (req.files)
+            profile_pic = (yield (0, uploadImages_1.default)(req.files, 'Profile Images'))[0];
+        const result = yield users.update(res.locals.user, req.body.new_fullname, req.body.new_email, req.body.new_phone_number, profile_pic);
         if (!result.Message.includes("successfully")) // Not Successfully
             res.json({ Message: result.Message, Flag: false }).status(403);
         else

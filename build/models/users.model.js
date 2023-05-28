@@ -17,7 +17,7 @@ const index_1 = __importDefault(require("./../database/index"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const config_1 = require("../configuration/config");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const storeImages_1 = __importDefault(require("./functions/storeImages"));
+const uploadImages_1 = __importDefault(require("../controllers/functions/uploadImages"));
 class Users {
     register(input) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -31,7 +31,7 @@ class Users {
                 //Getting hashed password to be stored in db
                 const hashedPassword = bcrypt_1.default.hashSync(input.password, config_1.config.salt);
                 //Uploading profile picture to cloudinairy and getting the link
-                const url = yield (0, storeImages_1.default)(input.profile_pic ? [input.profile_pic] : [], 'Profile Images')[0];
+                const url = yield (0, uploadImages_1.default)(input.profile_pic ? [input.profile_pic] : [], 'Profile Images')[0];
                 console.log(url);
                 const sql = "INSERT INTO users (fullname, email, phone_number, password, profile_pic) VALUES ($1, $2, $3, $4, $5) RETURNING *";
                 const res = yield connection.query(sql, [input.fullname, input.email, input.phone_number, hashedPassword, url]);
@@ -157,11 +157,9 @@ class Users {
                         return ({ Message: "Phone number update failed" });
                 }
                 if (profile_pic) {
-                    const urls = yield (0, storeImages_1.default)([profile_pic], 'Profile Images');
-                    const url = urls[0];
                     const sql = "UPDATE users SET profile_pic=$1 WHERE email=$2 OR phone_number=$2 RETURNING profile_pic";
-                    const res = yield connection.query(sql, [url, user]);
-                    if (res.rows[0].profile_pic === url)
+                    const res = yield connection.query(sql, [profile_pic, user]);
+                    if (res.rows[0].profile_pic === profile_pic)
                         return ({ Message: "Profile Picture updated successfully", Token: jsonwebtoken_1.default.sign(user, config_1.config.secret_key) });
                     else
                         return ({ Message: "Profile Picture update failed" });
