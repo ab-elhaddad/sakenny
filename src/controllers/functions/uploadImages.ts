@@ -21,7 +21,8 @@ const uploadImages = async (images, folder: string): Promise<string[]> => {
 
         const res = await cloudinary.uploader.upload(image.path, options);
         fs.rm(image.path, (err) => {
-            console.log(err);
+            if (err)
+                console.log(err);
             return;
         })
         //fs.rmSync(image);
