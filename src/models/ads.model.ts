@@ -27,6 +27,7 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
                 if (i != ad.images.length - 1) row += ',';
                 urlSQL += row
             }
+            console.log('Before getting images urls');
             // Executing one query to insert all ad images
             await connection.query(urlSQL, values);
 
