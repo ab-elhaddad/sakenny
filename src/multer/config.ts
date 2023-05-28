@@ -6,7 +6,7 @@ export const fileStorage = multer.diskStorage({
         if (config.ENV === 'dev' || config.ENV === 'test')
             cb(null, 'src/images/');
         else
-            cb(null, './images/');
+            cb(null, 'images/');
     },
     filename: (_req, file, cb) => {
         //console.log(file);

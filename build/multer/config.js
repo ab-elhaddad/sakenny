@@ -11,7 +11,7 @@ exports.fileStorage = multer_1.default.diskStorage({
         if (config_1.config.ENV === 'dev' || config_1.config.ENV === 'test')
             cb(null, 'src/images/');
         else
-            cb(null, './images/');
+            cb(null, 'images/');
     },
     filename: (_req, file, cb) => {
         //console.log(file);
