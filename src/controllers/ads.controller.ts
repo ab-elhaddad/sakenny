@@ -3,6 +3,8 @@ import Ads from '../models/ads.model';
 import Ad from '../types/Ad.type';
 import encryptFeatues from './functions/encryptFeatures';
 import uploadImages from './functions/uploadImages';
+import encryptTerms from './functions/encryptTerms';
+import decryptFeatures from './functions/decryptFeatures';
 
 const ads = new Ads();
 
@@ -17,18 +19,15 @@ export const getAll = async (_req: express.Request, res: express.Response) => {
     }
 }
 
-// NOT TESTED YET
+// DONE :)
 export const create = async (req: express.Request, res: express.Response) => {
     try {
-        //console.log(req);
         // Converting features and terms to bitset (e.g 01101)
         const features = encryptFeatues((req.body.features ? req.body.features : "").split('-'));
-        const terms = encryptFeatues((req.body.terms ? req.body.terms : "").split('-'));
+        const terms = encryptTerms((req.body.terms ? req.body.terms : "").split('-'));
 
         const images_description = req.body.images_description ? (req.body.images_description as string).split('-') : [];
         const images_url: string[] = await uploadImages(req.files, 'Ads Images');
-        console.log(req.files);
-        console.log(images_url);
 
         const ad: Ad = {
             city: req.body.city,
@@ -57,6 +56,21 @@ export const create = async (req: express.Request, res: express.Response) => {
     } catch (e) {
         console.log('Error in create function in ads.controller');
         throw e;
+    }
+}
+
+export const get = async (req: express.Request, res: express.Response) => {
+    try {
+        const result = await ads.get(req.body.ad_id);
+        if (!result.Message.includes('successfully'))
+            return res.json(result);
+        result.ad.features = decryptFeatures(result.ad.features);
+        result.ad.terms = decryptFeatures(result.ad.terms);
+        res.json(result);
+    }
+    catch (e) {
+        console.log('Error in get function in ads.controller');
+        res.json({ Message: 'An error occured', Flag: false });
     }
 }
 

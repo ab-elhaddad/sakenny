@@ -1,10 +1,9 @@
 import client from "../database";
 import Ad from "../types/Ad.type";
-import storeImages from "../controllers/functions/uploadImages";
 
-class Ads {
+class Ads { // Create - Search - Update - getAll(Home) - getOne
     // TODO
-    // - return desired ads
+    // - return created ads
     async create(user: string, ad: Ad): Promise<string> {
         try {
             const connection = await client.connect();
@@ -13,7 +12,7 @@ class Ads {
             const id = (await connection.query(idSQL, [user])).rows[0].id;
 
             // Inserting the new ad
-            const sql = 'INSERT INTO ads (user_id, title, space_type, description, price, city, governorate, lat, lng, gender, price_per, email, phone_number, features, terms) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10 ,$11 ,$12, $13, ($14::bit(3)), ($15::bit(3))) RETURNING *';
+            const sql = `INSERT INTO ads (user_id, title, space_type, description, price, city, governorate, lat, lng, gender, price_per, email, phone_number, features, terms) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10 ,$11 ,$12, $13, ($14::bit(20)), ($15::bit(10)) ) RETURNING *`;
             const res = await connection.query(sql, [id, ad.title, ad.space_type, ad.description, ad.price, ad.city, ad.governorate, ad.lat, ad.lng, ad.gender, ad.price_per, ad.email, ad.phone_number, ad.features, ad.terms]);
 
             // Inserting images in ad_images
@@ -70,6 +69,25 @@ class Ads {
         } catch (e) {
             console.log('Error in getAll function in ads.model');
             throw e;
+        }
+    }
+
+    async get(ad_id: number): Promise<any> {
+        try {
+            const connection = await client.connect();
+            const sql1 = 'SELECT * FROM ads WHERE id=($1)'; // Ad details
+            const sql2 = 'SELECT * FROM ad_images WHERE ad_id=($1)'; // Ad images
+            let details = (await connection.query(sql1, [ad_id]));
+            if (details.rowCount === 0)
+                return { Message: "No such ad with the provided id", Flag: false };
+
+            details = details.rows[0];
+            const images = (await connection.query(sql2, [ad_id])).rows;
+            return { Message: "Ad retrived successfully", Flag: true, ad: { ...details, images } };
+        }
+        catch (e) {
+            console.log('Error in get function in ads.model\n', e);
+            return { Message: "Couldnt retrive data", Flag: false };
         }
     }
 }
