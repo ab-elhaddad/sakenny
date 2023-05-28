@@ -85,7 +85,7 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
 
             details = details.rows[0];
             const images = (await connection.query(sql2, [ad_id])).rows;
-            connection.release();
+            //connection.release();
             return { Message: "Ad retrived successfully", Flag: true, ad: { ...details, images } };
         }
         catch (e) {
