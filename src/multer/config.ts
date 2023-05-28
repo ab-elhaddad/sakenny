@@ -3,8 +3,9 @@ import multer from "multer";
 
 export const fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {
+        console.log(__dirname + '/images');
         if (config.ENV === 'prod')
-            cb(null, __dirname + '/images/');
+            cb(null, __dirname + '/images');
         else
             cb(null, 'src/images/');
     },
