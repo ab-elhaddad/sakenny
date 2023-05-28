@@ -46,8 +46,8 @@ class Ads {
                     return { Message: 'Ad insertion failed', Flag: false };
                 const insertedAd = yield this.get(res.rows[0].id);
                 insertedAd.Message = 'Ad inserted successfully';
-                return insertedAd;
                 connection.release();
+                return insertedAd;
             }
             catch (e) {
                 console.log('Error in create function in ads.model\n', e);
