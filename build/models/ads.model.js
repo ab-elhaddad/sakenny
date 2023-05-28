@@ -50,7 +50,7 @@ class Ads {
                 connection.release();
             }
             catch (e) {
-                console.log('Error in create function in ads.model\n');
+                console.log('Error in create function in ads.model\n', e);
                 throw e;
             }
         });

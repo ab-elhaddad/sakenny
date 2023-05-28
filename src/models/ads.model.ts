@@ -41,7 +41,7 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
             connection.release();
         }
         catch (e) {
-            console.log('Error in create function in ads.model\n');
+            console.log('Error in create function in ads.model\n', e);
             throw e;
         }
     }
