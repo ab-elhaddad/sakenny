@@ -7,7 +7,7 @@ import multer from 'multer';
 const upload = multer({ storage: fileStorage });
 
 const adsRouter = (app: express.Application): void => {
-    app.get('/ads', getAll);
+    app.get('/ads/get-all', getAll);
     app.post('/ads/create', authenticate, upload.array('images'), create);
     app.post('/ads/search', search);
     app.post('/ads/get', get);

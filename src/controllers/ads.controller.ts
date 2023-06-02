@@ -8,17 +8,6 @@ import decryptFeatures from './functions/decryptFeatures';
 
 const ads = new Ads();
 
-export const getAll = async (_req: express.Request, res: express.Response) => {
-    try {
-        const result = await ads.getAll();
-        res.json({ Message: 'Data retrieved successfully', Flag: true, Data: result });
-    }
-    catch (e) {
-        console.log('Error in getAll function in ads.controller');
-        throw e;
-    }
-}
-
 // return created ad
 export const create = async (req: express.Request, res: express.Response) => {
     try {
@@ -56,6 +45,17 @@ export const create = async (req: express.Request, res: express.Response) => {
             res.json(result).status(301);
     } catch (e) {
         console.log('Error in create function in ads.controller');
+        throw e;
+    }
+}
+
+export const getAll = async (_req: express.Request, res: express.Response) => {
+    try {
+        const result = await ads.getAll();
+        res.json({ Message: 'Data retrieved successfully', Flag: true, ads: result });
+    }
+    catch (e) {
+        console.log('Error in getAll function in ads.controller');
         throw e;
     }
 }

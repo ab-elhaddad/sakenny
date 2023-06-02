@@ -68,6 +68,13 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
             const connection = await client.connect();
             const sql = 'SELECT * FROM ads';
             const res = await connection.query(sql);
+
+            // get ads images
+            for (const image of res.rows) {
+                const sql = 'SELECT url, description FROM ad_images WHERE ad_id=($1)';
+                image.images = (await connection.query(sql, [image.id])).rows;
+            }
+
             connection.release();
             return res.rows;
         } catch (e) {
