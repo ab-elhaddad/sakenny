@@ -18,6 +18,7 @@ const encryptFeatures_1 = __importDefault(require("./functions/encryptFeatures")
 const uploadImages_1 = __importDefault(require("./functions/uploadImages"));
 const encryptTerms_1 = __importDefault(require("./functions/encryptTerms"));
 const decryptFeatures_1 = __importDefault(require("./functions/decryptFeatures"));
+const decryptTerms_1 = __importDefault(require("./functions/decryptTerms"));
 const ads = new ads_model_1.default();
 // return created ad
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -61,6 +62,11 @@ exports.create = create;
 const getAll = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield ads.getAll();
+        // decrypt features and terms
+        for (let ad of result) {
+            ad.features = (0, decryptFeatures_1.default)(ad.features);
+            ad.terms = (0, decryptTerms_1.default)(ad.terms);
+        }
         res.json({ Message: 'Data retrieved successfully', Flag: true, ads: result });
     }
     catch (e) {
@@ -75,7 +81,7 @@ const get = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!result.Message.includes('successfully'))
             return res.json(result);
         result.ad.features = (0, decryptFeatures_1.default)(result.ad.features);
-        result.ad.terms = (0, decryptFeatures_1.default)(result.ad.terms);
+        result.ad.terms = (0, decryptTerms_1.default)(result.ad.terms);
         res.json(result);
     }
     catch (e) {
