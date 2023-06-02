@@ -12,24 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.search = exports.get = exports.create = exports.getAll = void 0;
+exports.search = exports.get = exports.getAll = exports.create = void 0;
 const ads_model_1 = __importDefault(require("../models/ads.model"));
 const encryptFeatures_1 = __importDefault(require("./functions/encryptFeatures"));
 const uploadImages_1 = __importDefault(require("./functions/uploadImages"));
 const encryptTerms_1 = __importDefault(require("./functions/encryptTerms"));
 const decryptFeatures_1 = __importDefault(require("./functions/decryptFeatures"));
 const ads = new ads_model_1.default();
-const getAll = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const result = yield ads.getAll();
-        res.json({ Message: 'Data retrieved successfully', Flag: true, Data: result });
-    }
-    catch (e) {
-        console.log('Error in getAll function in ads.controller');
-        throw e;
-    }
-});
-exports.getAll = getAll;
 // return created ad
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -69,6 +58,17 @@ const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.create = create;
+const getAll = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield ads.getAll();
+        res.json({ Message: 'Data retrieved successfully', Flag: true, ads: result });
+    }
+    catch (e) {
+        console.log('Error in getAll function in ads.controller');
+        throw e;
+    }
+});
+exports.getAll = getAll;
 const get = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield ads.get(req.body.ad_id);

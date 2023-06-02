@@ -9,7 +9,7 @@ const config_1 = require("../../multer/config");
 const multer_1 = __importDefault(require("multer"));
 const upload = (0, multer_1.default)({ storage: config_1.fileStorage });
 const adsRouter = (app) => {
-    app.get('/ads', ads_controller_1.getAll);
+    app.get('/ads/get-all', ads_controller_1.getAll);
     app.post('/ads/create', authenticate_middleware_1.default, upload.array('images'), ads_controller_1.create);
     app.post('/ads/search', ads_controller_1.search);
     app.post('/ads/get', ads_controller_1.get);

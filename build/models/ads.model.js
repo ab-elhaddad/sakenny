@@ -81,6 +81,11 @@ class Ads {
                 const connection = yield index_1.default.connect();
                 const sql = 'SELECT * FROM ads';
                 const res = yield connection.query(sql);
+                // get ads images
+                for (const image of res.rows) {
+                    const sql = 'SELECT url, description FROM ad_images WHERE ad_id=($1)';
+                    image.images = (yield connection.query(sql, [image.id])).rows;
+                }
                 connection.release();
                 return res.rows;
             }
