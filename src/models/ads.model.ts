@@ -63,7 +63,7 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
     async update() {
     }
 
-    async getAll(): Promise<object> {
+    async getAll(): Promise<any> {
         try {
             const connection = await client.connect();
             const sql = 'SELECT * FROM ads';

@@ -5,6 +5,7 @@ import encryptFeatues from './functions/encryptFeatures';
 import uploadImages from './functions/uploadImages';
 import encryptTerms from './functions/encryptTerms';
 import decryptFeatures from './functions/decryptFeatures';
+import decryptTerms from './functions/decryptTerms';
 
 const ads = new Ads();
 
@@ -52,6 +53,13 @@ export const create = async (req: express.Request, res: express.Response) => {
 export const getAll = async (_req: express.Request, res: express.Response) => {
     try {
         const result = await ads.getAll();
+
+        // decrypt features and terms
+        for (let ad of result) {
+            ad.features = decryptFeatures(ad.features);
+            ad.terms = decryptTerms(ad.terms);
+        }
+
         res.json({ Message: 'Data retrieved successfully', Flag: true, ads: result });
     }
     catch (e) {
@@ -66,7 +74,7 @@ export const get = async (req: express.Request, res: express.Response) => {
         if (!result.Message.includes('successfully'))
             return res.json(result);
         result.ad.features = decryptFeatures(result.ad.features);
-        result.ad.terms = decryptFeatures(result.ad.terms);
+        result.ad.terms = decryptTerms(result.ad.terms);
         res.json(result);
     }
     catch (e) {
