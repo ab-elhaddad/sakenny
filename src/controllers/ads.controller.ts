@@ -87,3 +87,12 @@ export const search = async (req: express.Request, res: express.Response) => {
     await ads.search();
     return res.json('Done');
 }
+
+export const deleteAd = async (req: express.Request, res: express.Response) => {
+    const result = await ads.deleteAd(req.body.ad_id, res.locals.user);
+
+    if (result.Message.includes('successfully'))
+        return res.json(result);
+    else
+        return res.json(result).status(301);
+}

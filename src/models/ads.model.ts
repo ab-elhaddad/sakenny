@@ -102,6 +102,21 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
             return { Message: "Couldnt retrive data", Flag: false };
         }
     }
+
+    async deleteAd(ad_id: number, user: string): Promise<any> {
+        const connection = await client.connect();
+
+        const user_id = (await connection.query('SELECT id FROM users WHERE email=$1 or phone_number=$1', [user])).rows[0].id;
+
+        const sql = 'DELETE FROM ads WHERE id=($1) and user_id=($2)';
+        const res = await connection.query(sql, [ad_id, user_id]);
+        connection.release();
+
+        if (res.rowCount === 0)
+            return { Message: "No such ad with the provided id", Flag: false };
+        else
+            return { Message: "Ad deleted successfully", Flag: true };
+    }
 }
 
 export default Ads;
