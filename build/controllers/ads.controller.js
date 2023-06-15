@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.search = exports.get = exports.getAll = exports.create = void 0;
+exports.deleteAd = exports.search = exports.get = exports.getAll = exports.create = void 0;
 const ads_model_1 = __importDefault(require("../models/ads.model"));
 const encryptFeatures_1 = __importDefault(require("./functions/encryptFeatures"));
 const uploadImages_1 = __importDefault(require("./functions/uploadImages"));
@@ -95,3 +95,11 @@ const search = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     return res.json('Done');
 });
 exports.search = search;
+const deleteAd = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield ads.deleteAd(req.body.ad_id, res.locals.user);
+    if (result.Message.includes('successfully'))
+        return res.json(result);
+    else
+        return res.json(result).status(301);
+});
+exports.deleteAd = deleteAd;

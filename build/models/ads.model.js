@@ -115,5 +115,18 @@ class Ads {
             }
         });
     }
+    deleteAd(ad_id, user) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const connection = yield index_1.default.connect();
+            const user_id = (yield connection.query('SELECT id FROM users WHERE email=$1 or phone_number=$1', [user])).rows[0].id;
+            const sql = 'DELETE FROM ads WHERE id=($1) and user_id=($2)';
+            const res = yield connection.query(sql, [ad_id, user_id]);
+            connection.release();
+            if (res.rowCount === 0)
+                return { Message: "No such ad with the provided id", Flag: false };
+            else
+                return { Message: "Ad deleted successfully", Flag: true };
+        });
+    }
 }
 exports.default = Ads;
