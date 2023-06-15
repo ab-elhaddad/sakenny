@@ -1,4 +1,4 @@
-import client from "../../database";
+import client from "../../database/index";
 
 class AdImages {
     deleteImage = async (ad_id: number, image_url: string, user: string) => {

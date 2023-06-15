@@ -12,11 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const database_1 = __importDefault(require("../../database"));
+const index_1 = __importDefault(require("../../database/index"));
 class AdImages {
     constructor() {
         this.deleteImage = (ad_id, image_url, user) => __awaiter(this, void 0, void 0, function* () {
-            const connection = yield database_1.default.connect();
+            const connection = yield index_1.default.connect();
             // Get user id 
             const sqlToGetUserId = 'SELECT id FROM users WHERE email=$1 or phone_number=$1';
             const user_id = (yield connection.query(sqlToGetUserId, [user])).rows[0].id;
