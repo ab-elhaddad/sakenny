@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteAd = exports.search = exports.get = exports.getAll = exports.create = void 0;
+exports.update = exports.deleteAd = exports.search = exports.get = exports.getAll = exports.create = void 0;
 const ads_model_1 = __importDefault(require("../models/ads.model"));
 const encryptFeatures_1 = __importDefault(require("./functions/encryptFeatures"));
 const uploadImages_1 = __importDefault(require("./functions/uploadImages"));
@@ -103,3 +103,36 @@ const deleteAd = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.json(result).status(301);
 });
 exports.deleteAd = deleteAd;
+const update = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const ad = {
+            new_city: req.body.new_city,
+            new_description: req.body.new_description,
+            new_email: req.body.new_email,
+            new_gender: req.body.new_gender,
+            new_governorate: req.body.new_governorate,
+            new_lat: req.body.new_lat,
+            new_lng: req.body.new_lng,
+            new_phone_number: req.body.new_phone_number,
+            new_price: req.body.new_price,
+            new_price_per: req.body.new_price_per,
+            new_space_type: req.body.new_space_type,
+            new_title: req.body.new_title,
+            new_features: req.body.new_features != undefined ? (0, encryptFeatures_1.default)(req.body.new_features.split('-')) : undefined,
+            new_terms: req.body.new_terms != undefined ? (0, encryptTerms_1.default)(req.body.new_terms.split('-')) : undefined,
+        };
+        const result = yield ads.update(req.body.ad_id, ad);
+        result.ad.features = (0, decryptFeatures_1.default)(result.ad.features);
+        result.ad.terms = (0, decryptTerms_1.default)(result.ad.terms);
+        console.log(result);
+        if (result.Message.includes('successfully'))
+            res.json(result);
+        else
+            res.json(result).status(401);
+    }
+    catch (e) {
+        console.log('Error in update ads.controller\n', e);
+        return res.json({ Message: 'Some error has occured' }).status(401);
+    }
+});
+exports.update = update;

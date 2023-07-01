@@ -71,8 +71,69 @@ class Ads {
             connection.release();
         });
     }
-    update() {
+    update(ad_id, ad) {
         return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log(ad);
+                const connection = yield index_1.default.connect();
+                let attributesCounter = 2;
+                let sql = `UPDATE ads SET `
+                    + (ad.new_title ? `title=$${attributesCounter++},` : ``)
+                    + (ad.new_space_type ? `space_type=$${attributesCounter++},` : ``)
+                    + (ad.new_description ? `description=$${attributesCounter++},` : ``)
+                    + (ad.new_price ? `price=$${attributesCounter++},` : ``)
+                    + (ad.new_city ? `city=$${attributesCounter++},` : ``)
+                    + (ad.new_governorate ? `governorate=$${attributesCounter++},` : ``)
+                    + (ad.new_lng ? `lng=$${attributesCounter++},` : ``)
+                    + (ad.new_lat ? `lat=$${attributesCounter++},` : ``)
+                    + (ad.new_gender != undefined ? `gender=$${attributesCounter++},` : ``)
+                    + (ad.new_email ? `email=$${attributesCounter++},` : ``)
+                    + (ad.new_phone_number ? `phone_number=$${attributesCounter++},` : ``)
+                    + (ad.new_price_per ? `price_per=$${attributesCounter++},` : ``)
+                    + (ad.new_features != undefined ? `features=$${attributesCounter++}::bit(20),` : ``)
+                    + (ad.new_terms != undefined ? `terms=$${attributesCounter++}::bit(10),` : ``);
+                if (sql.endsWith(','))
+                    sql = sql.slice(0, sql.length - 1);
+                sql += ` WHERE id=$1 `;
+                sql += `RETURNING *`;
+                console.log(sql);
+                let updatedAttributes = [ad_id];
+                if (ad.new_title)
+                    updatedAttributes.push(ad.new_title);
+                if (ad.new_space_type)
+                    updatedAttributes.push(ad.new_space_type);
+                if (ad.new_description)
+                    updatedAttributes.push(ad.new_description);
+                if (ad.new_price)
+                    updatedAttributes.push(ad.new_price);
+                if (ad.new_city)
+                    updatedAttributes.push(ad.new_city);
+                if (ad.new_governorate)
+                    updatedAttributes.push(ad.new_governorate);
+                if (ad.new_lng)
+                    updatedAttributes.push(ad.new_lng);
+                if (ad.new_lat)
+                    updatedAttributes.push(ad.new_lat);
+                if (ad.new_gender != undefined)
+                    updatedAttributes.push(ad.new_gender);
+                if (ad.new_email)
+                    updatedAttributes.push(ad.new_email);
+                if (ad.new_phone_number)
+                    updatedAttributes.push(ad.new_phone_number);
+                if (ad.new_price_per)
+                    updatedAttributes.push(ad.new_price_per);
+                if (ad.new_features != undefined)
+                    updatedAttributes.push(ad.new_features);
+                if (ad.new_terms != undefined)
+                    updatedAttributes.push(ad.new_terms);
+                console.log(updatedAttributes);
+                const res = (yield (connection.query(sql, updatedAttributes))).rows[0];
+                return { Message: 'Data updated successfully', ad: res };
+            }
+            catch (e) {
+                console.log('Error in update function in ads.model\n', e);
+                return { Message: 'Some error has occured' };
+            }
         });
     }
     getAll() {

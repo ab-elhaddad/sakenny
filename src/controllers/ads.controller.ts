@@ -6,6 +6,7 @@ import uploadImages from './functions/uploadImages';
 import encryptTerms from './functions/encryptTerms';
 import decryptFeatures from './functions/decryptFeatures';
 import decryptTerms from './functions/decryptTerms';
+import { updatedAd } from '../types/updatedAd.type';
 
 const ads = new Ads();
 
@@ -95,4 +96,40 @@ export const deleteAd = async (req: express.Request, res: express.Response) => {
         return res.json(result);
     else
         return res.json(result).status(301);
+}
+
+export const update = async (req: express.Request, res: express.Response) => {
+    try {
+        const ad: updatedAd = {
+            new_city: req.body.new_city,
+            new_description: req.body.new_description,
+            new_email: req.body.new_email,
+            new_gender: req.body.new_gender,
+            new_governorate: req.body.new_governorate,
+            new_lat: req.body.new_lat,
+            new_lng: req.body.new_lng,
+            new_phone_number: req.body.new_phone_number,
+            new_price: req.body.new_price,
+            new_price_per: req.body.new_price_per,
+            new_space_type: req.body.new_space_type,
+            new_title: req.body.new_title,
+            new_features: req.body.new_features != undefined ? encryptFeatues(req.body.new_features.split('-')) : undefined,
+            new_terms: req.body.new_terms != undefined ? encryptTerms(req.body.new_terms.split('-')) : undefined,
+        }
+
+        const result = await ads.update(req.body.ad_id, ad);
+        result.ad.features = decryptFeatures(result.ad.features);
+        result.ad.terms = decryptTerms(result.ad.terms);
+
+        console.log(result);
+
+        if (result.Message.includes('successfully'))
+            res.json(result);
+        else
+            res.json(result).status(401);
+    }
+    catch (e) {
+        console.log('Error in update ads.controller\n', e);
+        return res.json({ Message: 'Some error has occured' }).status(401);
+    }
 }

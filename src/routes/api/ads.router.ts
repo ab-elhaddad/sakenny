@@ -1,9 +1,9 @@
 import express from 'express';
-import { create, deleteAd, get, getAll, search } from '../../controllers/ads.controller';
+import { create, deleteAd, get, getAll, search, update } from '../../controllers/ads.controller';
 import authenticate from '../../middlewares/authenticate.middleware';
 import { fileStorage } from '../../multer/config';
 import multer from 'multer';
-import { deleteImage } from '../../controllers/ad_images.controller';
+import { addImage, deleteImage } from '../../controllers/ad_images.controller';
 
 const upload = multer({ storage: fileStorage });
 
@@ -14,6 +14,8 @@ const adsRouter = (app: express.Application): void => {
     app.post('/ads/get', get);
     app.delete('/ads/delete', authenticate, deleteAd);
     app.delete('/ads/delete-image', authenticate, deleteImage);
+    app.put('/ads/update', authenticate, update);
+    //app.post('/ads/add-image', authenticate, addImage);
 }
 
 export default adsRouter;
