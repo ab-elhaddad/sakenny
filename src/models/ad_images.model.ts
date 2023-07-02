@@ -1,4 +1,4 @@
-import client from "../../database/index";
+import client from "../database/index";
 
 class AdImages {
     deleteImage = async (ad_id: number, image_url: string, user: string) => {
@@ -25,6 +25,24 @@ class AdImages {
                 return { Message: "No such image with the provided url", Flag: false };
             else
                 return { Message: "Image deleted successfully", Flag: true };
+        }
+    }
+
+    addImage = async (ad_id: number, image_url: string, image_description: string) => {
+        try {
+            console.log(ad_id, image_url, image_description);
+            const connection = await client.connect();
+            const sql = 'INSERT INTO ad_images (ad_id, url, description) VALUES ($1, $2, $3) RETURNING *'
+            const res = await connection.query(sql, [ad_id, image_url, image_description]);
+            console.log(res.rows[0]);
+            if (res.rowCount > 0)
+                return { Message: "Image added successfully" };
+            else
+                return { Message: "Something went wrong!" };
+        }
+        catch (e) {
+            console.log('Error in addImage in ad_images.model\n', e);
+            return { Message: "Something went wrong!" };
         }
     }
 }

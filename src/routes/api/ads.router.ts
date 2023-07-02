@@ -15,7 +15,7 @@ const adsRouter = (app: express.Application): void => {
     app.delete('/ads/delete', authenticate, deleteAd);
     app.delete('/ads/delete-image', authenticate, deleteImage);
     app.put('/ads/update', authenticate, update);
-    //app.post('/ads/add-image', authenticate, addImage);
+    app.post('/ads/add-image', authenticate, upload.array('images'), addImage);
 }
 
 export default adsRouter;

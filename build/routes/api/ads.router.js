@@ -17,6 +17,6 @@ const adsRouter = (app) => {
     app.delete('/ads/delete', authenticate_middleware_1.default, ads_controller_1.deleteAd);
     app.delete('/ads/delete-image', authenticate_middleware_1.default, ad_images_controller_1.deleteImage);
     app.put('/ads/update', authenticate_middleware_1.default, ads_controller_1.update);
-    //app.post('/ads/add-image', authenticate, addImage);
+    app.post('/ads/add-image', authenticate_middleware_1.default, upload.array('images'), ad_images_controller_1.addImage);
 };
 exports.default = adsRouter;

@@ -12,8 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteImage = void 0;
-const ad_images_model_1 = __importDefault(require("../routes/api/ad_images.model"));
+exports.addImage = exports.deleteImage = void 0;
+const ad_images_model_1 = __importDefault(require("../models/ad_images.model"));
+const uploadImages_1 = __importDefault(require("./functions/uploadImages"));
 const adImages = new ad_images_model_1.default();
 const deleteImage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield adImages.deleteImage(req.body.ad_id, req.body.image_url, res.locals.user);
@@ -23,3 +24,18 @@ const deleteImage = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         return res.json(result).status(301);
 });
 exports.deleteImage = deleteImage;
+const addImage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const url = (yield (0, uploadImages_1.default)(req.files, 'Ads Images'))[0];
+        const result = yield adImages.addImage(req.body.ad_id, url, req.body.image_description);
+        if (result.Message.includes('successfully'))
+            return res.json(result);
+        else
+            return res.json(result).status(401);
+    }
+    catch (e) {
+        console.log('Error in add mage in ad_images.controller\n', e);
+        return res.json({ Message: "Something went wrong!" });
+    }
+});
+exports.addImage = addImage;

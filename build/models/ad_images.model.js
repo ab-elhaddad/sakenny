@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const index_1 = __importDefault(require("../../database/index"));
+const index_1 = __importDefault(require("../database/index"));
 class AdImages {
     constructor() {
         this.deleteImage = (ad_id, image_url, user) => __awaiter(this, void 0, void 0, function* () {
@@ -39,9 +39,11 @@ class AdImages {
         });
         this.addImage = (ad_id, image_url, image_description) => __awaiter(this, void 0, void 0, function* () {
             try {
+                console.log(ad_id, image_url, image_description);
                 const connection = yield index_1.default.connect();
                 const sql = 'INSERT INTO ad_images (ad_id, url, description) VALUES ($1, $2, $3) RETURNING *';
                 const res = yield connection.query(sql, [ad_id, image_url, image_description]);
+                console.log(res.rows[0]);
                 if (res.rowCount > 0)
                     return { Message: "Image added successfully" };
                 else
