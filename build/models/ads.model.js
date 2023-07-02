@@ -140,7 +140,7 @@ class Ads {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const connection = yield index_1.default.connect();
-                const sql = 'SELECT * FROM ads';
+                const sql = 'SELECT * FROM ads ORDER BY id DESC';
                 const res = yield connection.query(sql);
                 // get ads images
                 for (const image of res.rows) {

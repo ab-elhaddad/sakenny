@@ -117,7 +117,7 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
     async getAll(): Promise<any> {
         try {
             const connection = await client.connect();
-            const sql = 'SELECT * FROM ads';
+            const sql = 'SELECT * FROM ads ORDER BY id DESC';
             const res = await connection.query(sql);
 
             // get ads images
