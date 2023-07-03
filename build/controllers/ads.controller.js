@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.update = exports.deleteAd = exports.search = exports.get = exports.getAll = exports.create = void 0;
+exports.getByUser = exports.update = exports.deleteAd = exports.search = exports.get = exports.getAll = exports.create = void 0;
 const ads_model_1 = __importDefault(require("../models/ads.model"));
 const encryptFeatures_1 = __importStar(require("./functions/encryptFeatures"));
 const uploadImages_1 = __importDefault(require("./functions/uploadImages"));
@@ -179,3 +179,22 @@ const update = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.update = update;
+const getByUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield ads.getByUser(res.locals.user);
+        if (result.Message.includes('successfully')) {
+            for (const ad of result.Ads) {
+                ad.features = (0, decryptFeatures_1.default)(ad.features);
+                ad.terms = (0, decryptTerms_1.default)(ad.terms);
+            }
+            res.json(Object.assign({ Flag: true }, result));
+        }
+        else
+            res.json(result).status(401);
+    }
+    catch (e) {
+        console.log('Error in getByUser function in ads.controller\n', e);
+        res.json({ Message: 'An error occured', Flag: false });
+    }
+});
+exports.getByUser = getByUser;

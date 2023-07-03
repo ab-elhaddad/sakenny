@@ -207,5 +207,26 @@ class Ads {
                 return { Message: "Ad deleted successfully", Flag: true };
         });
     }
+    getByUser(user) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const connection = yield index_1.default.connect();
+                const get_id_sql = 'SELECT id FROM users WHERE email=$1 or phone_number=$1';
+                const user_id = (yield connection.query(get_id_sql, [user])).rows[0].id;
+                const sql = 'SELECT * FROM ads WHERE user_id=$1 ORDER BY id DESC';
+                const res = yield connection.query(sql, [user_id]);
+                // get ads images
+                for (const ad of res.rows) {
+                    ad.images = yield this.getImages(ad.id, connection);
+                }
+                connection.release();
+                return { Message: "Data retrieved successfully", Ads: res.rows };
+            }
+            catch (e) {
+                console.log('Error in getByUser function in ads.model');
+                return { Message: "Couldnt retrive data", Flag: false };
+            }
+        });
+    }
 }
 exports.default = Ads;

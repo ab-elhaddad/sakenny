@@ -190,6 +190,29 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
         else
             return { Message: "Ad deleted successfully", Flag: true };
     }
+
+    async getByUser(user: string): Promise<any> {
+        try {
+            const connection = await client.connect();
+
+            const get_id_sql = 'SELECT id FROM users WHERE email=$1 or phone_number=$1';
+            const user_id = (await connection.query(get_id_sql, [user])).rows[0].id;
+
+            const sql = 'SELECT * FROM ads WHERE user_id=$1 ORDER BY id DESC';
+            const res = await connection.query(sql, [user_id]);
+
+            // get ads images
+            for (const ad of res.rows) {
+                ad.images = await this.getImages(ad.id, connection);
+            }
+
+            connection.release();
+            return { Message: "Data retrieved successfully", Ads: res.rows };
+        } catch (e) {
+            console.log('Error in getByUser function in ads.model');
+            return { Message: "Couldnt retrive data", Flag: false };
+        }
+    }
 }
 
 export default Ads;

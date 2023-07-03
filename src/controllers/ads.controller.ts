@@ -156,3 +156,22 @@ export const update = async (req: express.Request, res: express.Response) => {
         return res.json({ Message: 'Some error has occured' }).status(401);
     }
 }
+
+export const getByUser = async (req: express.Request, res: express.Response) => {
+    try {
+        const result = await ads.getByUser(res.locals.user);
+        if (result.Message.includes('successfully')) {
+            for (const ad of result.Ads) {
+                ad.features = decryptFeatures(ad.features);
+                ad.terms = decryptTerms(ad.terms);
+            }
+            res.json({ Flag: true, ...result });
+        }
+        else
+            res.json(result).status(401);
+    }
+    catch (e) {
+        console.log('Error in getByUser function in ads.controller\n', e);
+        res.json({ Message: 'An error occured', Flag: false });
+    }
+}
