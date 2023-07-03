@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ALL_FEATURES = void 0;
 const myFeatures = ['WiFi', 'Kitchen', 'Bathroom', 'Air Conditioner', 'Heater', 'Washing Machine', 'Cooker', 'Balcony', 'Refrigerator', 'TV', 'Microwave', 'Elevator'];
+exports.ALL_FEATURES = '111111111111';
 const encryptFeatues = (features) => {
     let res = "";
     for (const myFeature of myFeatures) {

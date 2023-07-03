@@ -58,17 +58,35 @@ class Ads {
             }
         });
     }
-    search() {
+    search(ad) {
         return __awaiter(this, void 0, void 0, function* () {
-            const connection = yield index_1.default.connect();
-            const number = 2;
-            const num = '110';
-            const binaryNumber = number.toString(2);
-            console.log(binaryNumber);
-            const sql = 'SELECT * FROM ads WHERE  ((features) & (($1)::bit(3)) ) != (0::bit(3))';
-            const res = yield connection.query(sql, [num]);
-            console.log(res.rows);
-            connection.release();
+            try {
+                const connection = yield index_1.default.connect();
+                const sql = 'SELECT * FROM ads WHERE governorate=$1 AND city=$2 AND space_type=$3 AND price>=$4 AND price<=$5 AND ((features&($6::bit(20)))::integer <> 0) AND ((terms&($7::bit(10)))::integer <> 0)';
+                const res = (yield connection.query(sql, [ad.governorate, ad.city, ad.space_type, ad.start_price, ad.end_price, ad.features, ad.terms])).rows;
+                // Getting images for each ad
+                for (const responseAd of res)
+                    responseAd.images = yield this.getImages(responseAd.id, connection);
+                connection.release();
+                return { Message: 'Ads found', Flag: true, Ads: res };
+            }
+            catch (e) {
+                console.log('Error in search function in ads.model\n', e);
+                return { Message: 'Error in search function in ads.model', Flag: false };
+            }
+        });
+    }
+    getImages(ad_id, connection) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const sql = "SELECT url, description FROM ad_images WHERE ad_id=$1";
+                const res = yield connection.query(sql, [ad_id]);
+                return res.rows;
+            }
+            catch (e) {
+                console.log('Error in getImages function in ads.model\n', e);
+                throw e;
+            }
         });
     }
     update(ad_id, ad) {

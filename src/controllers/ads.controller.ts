@@ -1,12 +1,13 @@
 import express from 'express';
 import Ads from '../models/ads.model';
 import Ad from '../types/Ad.type';
-import encryptFeatues from './functions/encryptFeatures';
+import encryptFeatues, { ALL_FEATURES } from './functions/encryptFeatures';
 import uploadImages from './functions/uploadImages';
-import encryptTerms from './functions/encryptTerms';
+import encryptTerms, { ALL_TERMS } from './functions/encryptTerms';
 import decryptFeatures from './functions/decryptFeatures';
 import decryptTerms from './functions/decryptTerms';
 import { updatedAd } from '../types/updatedAd.type';
+import { searchedAd } from '../types/serchedAd.type';
 
 const ads = new Ads();
 
@@ -85,8 +86,30 @@ export const get = async (req: express.Request, res: express.Response) => {
 }
 
 export const search = async (req: express.Request, res: express.Response) => {
-    await ads.search();
-    return res.json('Done');
+    try {
+        let ad: searchedAd = {
+            city: req.body.city,
+            governorate: req.body.governorate,
+            space_type: req.body.space_type,
+            start_price: req.body.start_price,
+            end_price: req.body.end_price,
+            features: req.body.features ? encryptFeatues(req.body.features.split('-')) : ALL_FEATURES,
+            terms: req.body.terms ? encryptTerms(req.body.terms.split('-')) : ALL_TERMS,
+        }
+        const result = await ads.search(ad);
+
+        if (result.Ads)
+            for (let ad of result.Ads) {
+                ad.features = decryptFeatures(ad.features);
+                ad.terms = decryptTerms(ad.terms);
+            }
+
+        return res.json(result);
+    }
+    catch (e) {
+        console.log('Error in search function in ads.controller');
+        res.json({ Message: 'An error occured', Flag: false });
+    }
 }
 
 export const deleteAd = async (req: express.Request, res: express.Response) => {

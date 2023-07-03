@@ -1,5 +1,7 @@
+import { PoolClient } from "pg";
 import client from "../database/index";
 import Ad from "../types/Ad.type";
+import { searchedAd } from "../types/serchedAd.type";
 import { updatedAd } from "../types/updatedAd.type";
 
 class Ads { // Create - Search - Update - getAll(Home) - getOne
@@ -49,16 +51,36 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
         }
     }
 
-    async search() {
-        const connection = await client.connect();
-        const number = 2;
-        const num = '110';
-        const binaryNumber = number.toString(2);
-        console.log(binaryNumber);
-        const sql = 'SELECT * FROM ads WHERE  ((features) & (($1)::bit(3)) ) != (0::bit(3))';
-        const res = await connection.query(sql, [num]);
-        console.log(res.rows);
-        connection.release();
+    async search(ad: searchedAd) {
+        try {
+            const connection = await client.connect();
+
+            const sql = 'SELECT * FROM ads WHERE governorate=$1 AND city=$2 AND space_type=$3 AND price>=$4 AND price<=$5 AND ((features&($6::bit(20)))::integer <> 0) AND ((terms&($7::bit(10)))::integer <> 0)';
+
+            const res = (await connection.query(sql, [ad.governorate, ad.city, ad.space_type, ad.start_price, ad.end_price, ad.features, ad.terms])).rows;
+
+            // Getting images for each ad
+            for (const responseAd of res)
+                responseAd.images = await this.getImages(responseAd.id, connection);
+
+            connection.release();
+            return { Message: 'Ads found', Flag: true, Ads: res };
+        } catch (e) {
+            console.log('Error in search function in ads.model\n', e);
+            return { Message: 'Error in search function in ads.model', Flag: false };
+        }
+    }
+
+    async getImages(ad_id: number, connection: PoolClient) {
+        try {
+            const sql = "SELECT url, description FROM ad_images WHERE ad_id=$1";
+            const res = await connection.query(sql, [ad_id]);
+            return res.rows;
+        }
+        catch (e) {
+            console.log('Error in getImages function in ads.model\n', e);
+            throw e;
+        }
     }
 
     async update(ad_id: number, ad: updatedAd) {

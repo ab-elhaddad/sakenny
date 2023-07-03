@@ -1,4 +1,5 @@
 const myTerms: string[] = ['No Pets', 'No Smoking', 'Share Bills', 'Share Cleaning Works'];
+export const ALL_TERMS = '1111';
 
 const encryptTerms = (features: string[]): string => {
     let res = "";

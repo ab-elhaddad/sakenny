@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -14,9 +37,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.update = exports.deleteAd = exports.search = exports.get = exports.getAll = exports.create = void 0;
 const ads_model_1 = __importDefault(require("../models/ads.model"));
-const encryptFeatures_1 = __importDefault(require("./functions/encryptFeatures"));
+const encryptFeatures_1 = __importStar(require("./functions/encryptFeatures"));
 const uploadImages_1 = __importDefault(require("./functions/uploadImages"));
-const encryptTerms_1 = __importDefault(require("./functions/encryptTerms"));
+const encryptTerms_1 = __importStar(require("./functions/encryptTerms"));
 const decryptFeatures_1 = __importDefault(require("./functions/decryptFeatures"));
 const decryptTerms_1 = __importDefault(require("./functions/decryptTerms"));
 const ads = new ads_model_1.default();
@@ -91,8 +114,28 @@ const get = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.get = get;
 const search = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield ads.search();
-    return res.json('Done');
+    try {
+        let ad = {
+            city: req.body.city,
+            governorate: req.body.governorate,
+            space_type: req.body.space_type,
+            start_price: req.body.start_price,
+            end_price: req.body.end_price,
+            features: req.body.features ? (0, encryptFeatures_1.default)(req.body.features.split('-')) : encryptFeatures_1.ALL_FEATURES,
+            terms: req.body.terms ? (0, encryptTerms_1.default)(req.body.terms.split('-')) : encryptTerms_1.ALL_TERMS,
+        };
+        const result = yield ads.search(ad);
+        if (result.Ads)
+            for (let ad of result.Ads) {
+                ad.features = (0, decryptFeatures_1.default)(ad.features);
+                ad.terms = (0, decryptTerms_1.default)(ad.terms);
+            }
+        return res.json(result);
+    }
+    catch (e) {
+        console.log('Error in search function in ads.controller');
+        res.json({ Message: 'An error occured', Flag: false });
+    }
 });
 exports.search = search;
 const deleteAd = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
