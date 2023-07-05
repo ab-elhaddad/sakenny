@@ -231,7 +231,7 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
     async _read(): Promise<any> {
         try {
             const connection = await client.connect();
-            const sql = `SELECT * FROM ads`;
+            const sql = `SELECT * FROM ads ORDER BY id DESC`;
             const res = await connection.query(sql);
             return res.rows;
         }
