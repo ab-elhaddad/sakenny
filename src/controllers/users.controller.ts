@@ -2,6 +2,8 @@ import { User } from "../types/User.type";
 import { Users } from "../models/users.model";
 import express from 'express';
 import uploadImages from "./functions/uploadImages";
+import bcrypt from 'bcrypt';
+import { config } from "../configuration/config";
 
 const users = new Users();
 
@@ -131,5 +133,76 @@ export const updatePassword = async (req: express.Request, res: express.Response
     } catch (e) {
         console.log('Error in updatePassword in users.controller');
         throw e;
+    }
+}
+
+// CRUD Operations
+export const _create_ = async (req: express.Request, res: express.Response): Promise<void> => {
+    try {
+        const inputUser: User = {
+            fullname: req.body.fullname,
+            email: req.body.email,
+            phone_number: req.body.phone_number,
+            password: bcrypt.hashSync(req.body.password, config.salt)
+        };
+        await users._create(inputUser);
+        res.json({ Message: 'User Created Successfully', Flag: true });
+    }
+    catch (e) {
+        console.log('Error in _create function in users.controller\n', e);
+        res.json({ Message: 'An error occured', Flag: false }).status(500);
+    }
+}
+
+export const _read_ = async (req: express.Request, res: express.Response): Promise<void> => {
+    try {
+        const result = await users._read();
+        res.json({ Message: 'Data Retrieved Successfully', Flag: true, Users: result });
+    }
+    catch (e) {
+        console.log('Error in _read function in users.controller\n', e);
+        res.json({ Message: 'An error occured', Flag: false }).status(500);
+    }
+}
+
+export const _update_ = async (req: express.Request, res: express.Response): Promise<void> => {
+    // All data is required however it is not required to change all data
+    try {
+        const inputUser: User = {
+            id: req.body.id,
+            fullname: req.body.fullname,
+            email: req.body.email,
+            phone_number: req.body.phone_number,
+            password: bcrypt.hashSync(req.body.password, config.salt)
+        };
+        await users._update(inputUser);
+        res.json({ Message: 'User Updated Successfully', Flag: true });
+    }
+    catch (e) {
+        console.log('Error in _update function in users.controller\n', e);
+        res.json({ Message: 'An error occured', Flag: false }).status(500);
+    }
+}
+
+export const _updateImage_ = async (req: express.Request, res: express.Response): Promise<void> => {
+    try {
+        const url = (await uploadImages(req.files, 'Profile Images'))[0];
+        await users._updatePicture(req.body.id, url);
+        res.json({ Message: `User's image Updated Successfully`, Flag: true });
+    }
+    catch (e) {
+        console.log('Error in _updateImage function in users.controller\n', e);
+        res.json({ Message: 'An error occured', Flag: false }).status(500);
+    }
+}
+
+export const _delete_ = async (req: express.Request, res: express.Response): Promise<void> => {
+    try {
+        await users._delete(req.body.id);
+        res.json({ Message: 'User Deleted Successfully', Flag: true });
+    }
+    catch (e) {
+        console.log('Error in _delete function in users.controller\n', e);
+        res.json({ Message: 'An error occured', Flag: false }).status(500);
     }
 }

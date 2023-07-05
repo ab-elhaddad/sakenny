@@ -199,6 +199,74 @@ class Users {
             }
         });
     }
+    // CRUD Operations
+    _create(user) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const connection = yield index_1.default.connect();
+                const sql = "INSERT INTO users (fullname, email, phone_number, password) VALUES ($1, $2, $3, $4)";
+                yield connection.query(sql, [user.fullname, user.email, user.phone_number, user.password]);
+            }
+            catch (e) {
+                console.log('Error in _create function in users.model\n', e);
+                return;
+            }
+        });
+    }
+    _read() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const connection = yield index_1.default.connect();
+                const sql = "SELECT * FROM users ORDER BY id ASC";
+                const res = yield connection.query(sql);
+                return res.rows;
+            }
+            catch (e) {
+                console.log('Error in _read function in users.model\n', e);
+                return;
+            }
+        });
+    }
+    _update(user) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // All data is required however it is not required to change all data
+            try {
+                const connection = yield index_1.default.connect();
+                const sql = "UPDATE users SET fullname=$1, email=$2, phone_number=$3, password=$4 WHERE id=$5";
+                yield connection.query(sql, [user.fullname, user.email, user.phone_number, user.password, user.id]);
+            }
+            catch (e) {
+                console.log('Error in _update function in users.model\n', e);
+                return;
+            }
+        });
+    }
+    _updatePicture(id, url) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const connection = yield index_1.default.connect();
+                const sql = "UPDATE users SET profile_pic=$1 WHERE id=$2";
+                yield connection.query(sql, [url, id]);
+            }
+            catch (e) {
+                console.log('Error in _updatePicture function in users.model\n', e);
+                return;
+            }
+        });
+    }
+    _delete(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const connection = yield index_1.default.connect();
+                const sql = "DELETE FROM users WHERE id=$1";
+                yield connection.query(sql, [id]);
+            }
+            catch (e) {
+                console.log('Error in _delete function in users.model\n', e);
+                return;
+            }
+        });
+    }
 }
 exports.Users = Users;
 ;

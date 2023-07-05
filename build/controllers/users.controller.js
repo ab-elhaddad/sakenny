@@ -12,9 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatePassword = exports.update = exports.profile = exports.resetPassword = exports.login = exports.register = void 0;
+exports._delete_ = exports._updateImage_ = exports._update_ = exports._read_ = exports._create_ = exports.updatePassword = exports.update = exports.profile = exports.resetPassword = exports.login = exports.register = void 0;
 const users_model_1 = require("../models/users.model");
 const uploadImages_1 = __importDefault(require("./functions/uploadImages"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const config_1 = require("../configuration/config");
 const users = new users_model_1.Users();
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -140,3 +142,74 @@ const updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.updatePassword = updatePassword;
+// CRUD Operations
+const _create_ = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const inputUser = {
+            fullname: req.body.fullname,
+            email: req.body.email,
+            phone_number: req.body.phone_number,
+            password: bcrypt_1.default.hashSync(req.body.password, config_1.config.salt)
+        };
+        yield users._create(inputUser);
+        res.json({ Message: 'User Created Successfully', Flag: true });
+    }
+    catch (e) {
+        console.log('Error in _create function in users.controller\n', e);
+        res.json({ Message: 'An error occured', Flag: false }).status(500);
+    }
+});
+exports._create_ = _create_;
+const _read_ = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield users._read();
+        res.json({ Message: 'Data Retrieved Successfully', Flag: true, Users: result });
+    }
+    catch (e) {
+        console.log('Error in _read function in users.controller\n', e);
+        res.json({ Message: 'An error occured', Flag: false }).status(500);
+    }
+});
+exports._read_ = _read_;
+const _update_ = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // All data is required however it is not required to change all data
+    try {
+        const inputUser = {
+            id: req.body.id,
+            fullname: req.body.fullname,
+            email: req.body.email,
+            phone_number: req.body.phone_number,
+            password: bcrypt_1.default.hashSync(req.body.password, config_1.config.salt)
+        };
+        yield users._update(inputUser);
+        res.json({ Message: 'User Updated Successfully', Flag: true });
+    }
+    catch (e) {
+        console.log('Error in _update function in users.controller\n', e);
+        res.json({ Message: 'An error occured', Flag: false }).status(500);
+    }
+});
+exports._update_ = _update_;
+const _updateImage_ = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const url = (yield (0, uploadImages_1.default)(req.files, 'Profile Images'))[0];
+        yield users._updatePicture(req.body.id, url);
+        res.json({ Message: `User's image Updated Successfully`, Flag: true });
+    }
+    catch (e) {
+        console.log('Error in _updateImage function in users.controller\n', e);
+        res.json({ Message: 'An error occured', Flag: false }).status(500);
+    }
+});
+exports._updateImage_ = _updateImage_;
+const _delete_ = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield users._delete(req.body.id);
+        res.json({ Message: 'User Deleted Successfully', Flag: true });
+    }
+    catch (e) {
+        console.log('Error in _delete function in users.controller\n', e);
+        res.json({ Message: 'An error occured', Flag: false }).status(500);
+    }
+});
+exports._delete_ = _delete_;
