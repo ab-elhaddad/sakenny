@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getByUser = exports.update = exports.deleteAd = exports.search = exports.get = exports.getAll = exports.create = void 0;
+exports._delete = exports._update = exports._read = exports._create = exports.getByUser = exports.update = exports.deleteAd = exports.search = exports.get = exports.getAll = exports.create = void 0;
 const ads_model_1 = __importDefault(require("../models/ads.model"));
 const encryptFeatures_1 = __importStar(require("./functions/encryptFeatures"));
 const uploadImages_1 = __importDefault(require("./functions/uploadImages"));
@@ -202,3 +202,86 @@ const getByUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getByUser = getByUser;
+// CRUD Operations
+const _create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const features = (0, encryptFeatures_1.default)((req.body.features ? req.body.features : "").split('-'));
+        const terms = (0, encryptTerms_1.default)((req.body.terms ? req.body.terms : "").split('-'));
+        const images_description = req.body.images_description ? req.body.images_description.split('-') : [];
+        const images_url = yield (0, uploadImages_1.default)(req.files, 'Ads Images');
+        const ad = {
+            city: req.body.city,
+            gender: req.body.gender,
+            price: req.body.price,
+            price_per: req.body.price_per,
+            space_type: req.body.space_type,
+            title: req.body.title,
+            description: req.body.description,
+            lat: req.body.lat,
+            lng: req.body.lng,
+            governorate: req.body.governorate,
+            phone_number: req.body.phone_number,
+            email: req.body.email,
+            features: features,
+            terms: terms,
+            images: images_url,
+            images_description: images_description
+        };
+        yield ads._create(ad);
+        res.json({ Message: 'Ad created successfully', Flag: true });
+    }
+    catch (e) {
+        console.log('Error in _create function in ads.controller');
+        res.json({ Message: 'An error occured', Flag: false });
+    }
+});
+exports._create = _create;
+const _read = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield ads._read();
+        res.json({ Message: 'Data retrived successfully', Flag: true, Ads: result });
+    }
+    catch (e) {
+        console.log('Error in _read function in ads.controller');
+        res.json({ Message: 'An error occured', Flag: false });
+    }
+});
+exports._read = _read;
+const _update = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const ad = {
+            new_city: req.body.new_city,
+            new_description: req.body.new_description,
+            new_email: req.body.new_email,
+            new_gender: req.body.new_gender,
+            new_governorate: req.body.new_governorate,
+            new_lat: req.body.new_lat,
+            new_lng: req.body.new_lng,
+            new_phone_number: req.body.new_phone_number,
+            new_price: req.body.new_price,
+            new_price_per: req.body.new_price_per,
+            new_space_type: req.body.new_space_type,
+            new_title: req.body.new_title,
+            new_features: req.body.new_features != undefined ? (0, encryptFeatures_1.default)(req.body.new_features.split('-')) : undefined,
+            new_terms: req.body.new_terms != undefined ? (0, encryptTerms_1.default)(req.body.new_terms.split('-')) : undefined,
+        };
+        yield ads._update(req.body.ad_id, ad);
+        res.json({ Message: 'Ad updated successfully', Flag: true });
+    }
+    catch (e) {
+        console.log('Error in _update function in ads.controller');
+        res.json({ Message: 'An error occured', Flag: false });
+    }
+});
+exports._update = _update;
+const _delete = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield ads._delete(req.body.ad_id);
+        res.json({ Message: 'Ad deleted successfully', Flag: true });
+    }
+    catch (e) {
+        console.log('Error in _delete function in ads.controller');
+        res.json({ Message: 'An error occured', Flag: false });
+    }
+});
+exports._delete = _delete;

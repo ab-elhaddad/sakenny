@@ -181,3 +181,91 @@ export const getByUser = async (req: express.Request, res: express.Response) => 
         res.json({ Message: 'An error occured', Flag: false });
     }
 }
+
+// CRUD Operations
+
+export const _create = async (req: express.Request, res: express.Response) => {
+    try {
+        const features = encryptFeatues((req.body.features ? req.body.features : "").split('-'));
+        const terms = encryptTerms((req.body.terms ? req.body.terms : "").split('-'));
+
+        const images_description = req.body.images_description ? (req.body.images_description as string).split('-') : [];
+        const images_url: string[] = await uploadImages(req.files, 'Ads Images');
+
+        const ad: Ad = {
+            city: req.body.city,
+            gender: req.body.gender as boolean,
+            price: req.body.price as number,
+            price_per: req.body.price_per,
+            space_type: req.body.space_type,
+            title: req.body.title,
+            description: req.body.description,
+            lat: req.body.lat,
+            lng: req.body.lng,
+            governorate: req.body.governorate,
+            phone_number: req.body.phone_number,
+            email: req.body.email,
+            features: features,
+            terms: terms,
+            images: images_url,
+            images_description: images_description
+        }
+
+        await ads._create(ad);
+        res.json({ Message: 'Ad created successfully', Flag: true });
+    }
+    catch (e) {
+        console.log('Error in _create function in ads.controller');
+        res.json({ Message: 'An error occured', Flag: false });
+    }
+}
+
+export const _read = async (req: express.Request, res: express.Response) => {
+    try {
+        const result = await ads._read();
+        res.json({ Message: 'Data retrived successfully', Flag: true, Ads: result });
+    }
+    catch (e) {
+        console.log('Error in _read function in ads.controller');
+        res.json({ Message: 'An error occured', Flag: false });
+    }
+}
+
+export const _update = async (req: express.Request, res: express.Response) => {
+    try {
+        const ad: updatedAd = {
+            new_city: req.body.new_city,
+            new_description: req.body.new_description,
+            new_email: req.body.new_email,
+            new_gender: req.body.new_gender,
+            new_governorate: req.body.new_governorate,
+            new_lat: req.body.new_lat,
+            new_lng: req.body.new_lng,
+            new_phone_number: req.body.new_phone_number,
+            new_price: req.body.new_price,
+            new_price_per: req.body.new_price_per,
+            new_space_type: req.body.new_space_type,
+            new_title: req.body.new_title,
+            new_features: req.body.new_features != undefined ? encryptFeatues(req.body.new_features.split('-')) : undefined,
+            new_terms: req.body.new_terms != undefined ? encryptTerms(req.body.new_terms.split('-')) : undefined,
+        }
+
+        await ads._update(req.body.ad_id, ad);
+        res.json({ Message: 'Ad updated successfully', Flag: true });
+    }
+    catch (e) {
+        console.log('Error in _update function in ads.controller');
+        res.json({ Message: 'An error occured', Flag: false });
+    }
+}
+
+export const _delete = async (req: express.Request, res: express.Response) => {
+    try {
+        await ads._delete(req.body.ad_id);
+        res.json({ Message: 'Ad deleted successfully', Flag: true });
+    }
+    catch (e) {
+        console.log('Error in _delete function in ads.controller');
+        res.json({ Message: 'An error occured', Flag: false });
+    }
+}

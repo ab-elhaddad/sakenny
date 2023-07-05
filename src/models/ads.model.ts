@@ -213,6 +213,83 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
             return { Message: "Couldnt retrive data", Flag: false };
         }
     }
+
+    // CRUD Operations
+    async _create(ad: Ad): Promise<void> {
+        try {
+            const connection = await client.connect();
+            const sql = `INSERT INTO ads (user_id, title, space_type, description, price, city, governorate, lat, lng, gender, price_per, email, phone_number, features, terms) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10 ,$11 ,$12, $13, ($14::bit(20)), ($15::bit(10)) ) RETURNING id`;
+            await connection.query(sql, [0, ad.title, ad.space_type, ad.description, ad.price, ad.city, ad.governorate, ad.lat, ad.lng, ad.gender, ad.price_per, ad.email, ad.phone_number, ad.features, ad.terms]);
+            connection.release();
+        }
+        catch (e) {
+            console.log('Error in _create function in ads.model\n', e);
+            return;
+        }
+    }
+
+    async _read(): Promise<any> {
+        try {
+            const connection = await client.connect();
+            const sql = `SELECT * FROM ads`;
+            const res = await connection.query(sql);
+            return res.rows;
+        }
+        catch (e) {
+            console.log('Error in _read function in ads.model\n', e);
+            return;
+        }
+    }
+
+    async _update(ad_id: number, ad: updatedAd): Promise<void> {
+        try {
+            const connection = await client.connect();
+            let attributesCounter = 2;
+            let sql = `UPDATE ads SET `
+                + (ad.new_title ? `title=$${attributesCounter++},` : ``)
+                + (ad.new_space_type ? `space_type=$${attributesCounter++},` : ``)
+                + (ad.new_description ? `description=$${attributesCounter++},` : ``)
+                + (ad.new_price ? `price=$${attributesCounter++},` : ``)
+                + (ad.new_city ? `city=$${attributesCounter++},` : ``)
+                + (ad.new_governorate ? `governorate=$${attributesCounter++},` : ``)
+                + (ad.new_lng ? `lng=$${attributesCounter++},` : ``)
+                + (ad.new_lat ? `lat=$${attributesCounter++},` : ``)
+                + (ad.new_gender != undefined ? `gender=$${attributesCounter++},` : ``)
+                + (ad.new_email ? `email=$${attributesCounter++},` : ``)
+                + (ad.new_phone_number ? `phone_number=$${attributesCounter++},` : ``)
+                + (ad.new_price_per ? `price_per=$${attributesCounter++},` : ``)
+                + (ad.new_features != undefined ? `features=$${attributesCounter++}::bit(20),` : ``)
+                + (ad.new_terms != undefined ? `terms=$${attributesCounter++}::bit(10),` : ``)
+
+            if (sql.endsWith(',')) sql = sql.slice(0, sql.length - 1);
+            sql += ` WHERE id=$1 `
+            sql += `RETURNING *`;
+
+            console.log(sql);
+
+            let updatedAttributes: any[] = [ad_id];
+            for (const attribute of Object.keys(ad))
+                if (attribute) updatedAttributes.push(attribute);
+
+            await connection.query(sql, updatedAttributes);
+        }
+        catch (e) {
+            console.log('Error in _update function in ads.model\n', e);
+            return;
+        }
+    }
+
+    async _delete(ad_id: number): Promise<void> {
+        try {
+            const connection = await client.connect();
+            const sql = `DELETE FROM ads WHERE id=$1`;
+            await connection.query(sql, [ad_id]);
+        }
+        catch (e) {
+            console.log('Error in _delete function in ads.model\n', e);
+            return;
+        }
+    }
 }
 
 export default Ads;

@@ -228,5 +228,84 @@ class Ads {
             }
         });
     }
+    // CRUD Operations
+    _create(ad) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const connection = yield index_1.default.connect();
+                const sql = `INSERT INTO ads (user_id, title, space_type, description, price, city, governorate, lat, lng, gender, price_per, email, phone_number, features, terms) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10 ,$11 ,$12, $13, ($14::bit(20)), ($15::bit(10)) ) RETURNING id`;
+                yield connection.query(sql, [0, ad.title, ad.space_type, ad.description, ad.price, ad.city, ad.governorate, ad.lat, ad.lng, ad.gender, ad.price_per, ad.email, ad.phone_number, ad.features, ad.terms]);
+                connection.release();
+            }
+            catch (e) {
+                console.log('Error in _create function in ads.model\n', e);
+                return;
+            }
+        });
+    }
+    _read() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const connection = yield index_1.default.connect();
+                const sql = `SELECT * FROM ads`;
+                const res = yield connection.query(sql);
+                return res.rows;
+            }
+            catch (e) {
+                console.log('Error in _read function in ads.model\n', e);
+                return;
+            }
+        });
+    }
+    _update(ad_id, ad) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const connection = yield index_1.default.connect();
+                let attributesCounter = 2;
+                let sql = `UPDATE ads SET `
+                    + (ad.new_title ? `title=$${attributesCounter++},` : ``)
+                    + (ad.new_space_type ? `space_type=$${attributesCounter++},` : ``)
+                    + (ad.new_description ? `description=$${attributesCounter++},` : ``)
+                    + (ad.new_price ? `price=$${attributesCounter++},` : ``)
+                    + (ad.new_city ? `city=$${attributesCounter++},` : ``)
+                    + (ad.new_governorate ? `governorate=$${attributesCounter++},` : ``)
+                    + (ad.new_lng ? `lng=$${attributesCounter++},` : ``)
+                    + (ad.new_lat ? `lat=$${attributesCounter++},` : ``)
+                    + (ad.new_gender != undefined ? `gender=$${attributesCounter++},` : ``)
+                    + (ad.new_email ? `email=$${attributesCounter++},` : ``)
+                    + (ad.new_phone_number ? `phone_number=$${attributesCounter++},` : ``)
+                    + (ad.new_price_per ? `price_per=$${attributesCounter++},` : ``)
+                    + (ad.new_features != undefined ? `features=$${attributesCounter++}::bit(20),` : ``)
+                    + (ad.new_terms != undefined ? `terms=$${attributesCounter++}::bit(10),` : ``);
+                if (sql.endsWith(','))
+                    sql = sql.slice(0, sql.length - 1);
+                sql += ` WHERE id=$1 `;
+                sql += `RETURNING *`;
+                console.log(sql);
+                let updatedAttributes = [ad_id];
+                for (const attribute of Object.keys(ad))
+                    if (attribute)
+                        updatedAttributes.push(attribute);
+                yield connection.query(sql, updatedAttributes);
+            }
+            catch (e) {
+                console.log('Error in _update function in ads.model\n', e);
+                return;
+            }
+        });
+    }
+    _delete(ad_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const connection = yield index_1.default.connect();
+                const sql = `DELETE FROM ads WHERE id=$1`;
+                yield connection.query(sql, [ad_id]);
+            }
+            catch (e) {
+                console.log('Error in _delete function in ads.model\n', e);
+                return;
+            }
+        });
+    }
 }
 exports.default = Ads;
