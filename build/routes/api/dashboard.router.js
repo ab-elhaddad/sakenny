@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const ads_controller_1 = require("../../controllers/ads.controller");
 const users_controller_1 = require("../../controllers/users.controller");
+const ad_images_controller_1 = require("../../controllers/ad_images.controller");
 const dashboardRouter = (app) => {
     // Users Routes
     app.post('/dashboard/users/create', users_controller_1._create_);
@@ -14,5 +15,8 @@ const dashboardRouter = (app) => {
     app.get('/dashboard/ads/read', ads_controller_1._read);
     app.post('/dashboard/ads/update', ads_controller_1._update);
     app.delete('/dashboard/ads/delete', ads_controller_1._delete);
+    // Ads Images Routes
+    app.post('/dashboard/ads/add-image', ad_images_controller_1._addImage);
+    app.delete('/dashboard/ads/delete-image', ad_images_controller_1._deleteImage);
 };
 exports.default = dashboardRouter;

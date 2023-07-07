@@ -36,13 +36,27 @@ class AdImages {
             const res = await connection.query(sql, [ad_id, image_url, image_description]);
             console.log(res.rows[0]);
             if (res.rowCount > 0)
-                return { Message: "Image added successfully" };
+                return { Message: "Image added successfully", Flag: true };
             else
-                return { Message: "Something went wrong!" };
+                return { Message: "Something went wrong!", Flag: false };
         }
         catch (e) {
             console.log('Error in addImage in ad_images.model\n', e);
-            return { Message: "Something went wrong!" };
+            return { Message: "Something went wrong!", Flag: false };
+        }
+    }
+
+    _deleteImage = async (url: string) => {
+        try {
+            const connection = await client.connect();
+            const sql = 'DELETE FROM ad_images WHERE url=($1)';
+            await connection.query(sql, [url]);
+            connection.release();
+            return { Flag: true };
+        }
+        catch (e) {
+            console.log('Error in _deleteImage in ad_images.model\n', e);
+            return { Flag: false };
         }
     }
 }

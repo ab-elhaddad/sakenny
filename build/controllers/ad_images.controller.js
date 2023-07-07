@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addImage = exports.deleteImage = void 0;
+exports._deleteImage = exports._addImage = exports.addImage = exports.deleteImage = void 0;
 const ad_images_model_1 = __importDefault(require("../models/ad_images.model"));
 const uploadImages_1 = __importDefault(require("./functions/uploadImages"));
 const adImages = new ad_images_model_1.default();
@@ -39,3 +39,32 @@ const addImage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.addImage = addImage;
+const _addImage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const url = (yield (0, uploadImages_1.default)(req.files, 'Ads Images'))[0];
+        const result = yield adImages.addImage(req.body.ad_id, url, req.body.description);
+        if (result.Flag)
+            return res.json(result);
+        else
+            return res.json(result).status(401);
+    }
+    catch (e) {
+        console.log('Error in _addImage in ad_images.controller\n', e);
+        return res.json({ Flag: false });
+    }
+});
+exports._addImage = _addImage;
+const _deleteImage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield adImages._deleteImage(req.body.url);
+        if (result.Flag)
+            return res.json(result);
+        else
+            return res.json(result).status(401);
+    }
+    catch (e) {
+        console.log('Error in _deleteImage in ad_images.controller\n', e);
+        return res.json({ Flag: false });
+    }
+});
+exports._deleteImage = _deleteImage;

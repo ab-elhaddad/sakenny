@@ -45,13 +45,26 @@ class AdImages {
                 const res = yield connection.query(sql, [ad_id, image_url, image_description]);
                 console.log(res.rows[0]);
                 if (res.rowCount > 0)
-                    return { Message: "Image added successfully" };
+                    return { Message: "Image added successfully", Flag: true };
                 else
-                    return { Message: "Something went wrong!" };
+                    return { Message: "Something went wrong!", Flag: false };
             }
             catch (e) {
                 console.log('Error in addImage in ad_images.model\n', e);
-                return { Message: "Something went wrong!" };
+                return { Message: "Something went wrong!", Flag: false };
+            }
+        });
+        this._deleteImage = (url) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const connection = yield index_1.default.connect();
+                const sql = 'DELETE FROM ad_images WHERE url=($1)';
+                yield connection.query(sql, [url]);
+                connection.release();
+                return { Flag: true };
+            }
+            catch (e) {
+                console.log('Error in _deleteImage in ad_images.model\n', e);
+                return { Flag: false };
             }
         });
     }

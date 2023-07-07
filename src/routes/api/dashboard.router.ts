@@ -1,6 +1,7 @@
 import express from 'express';
 import { _create, _read, _update, _delete } from '../../controllers/ads.controller';
 import { _create_, _read_, _update_, _updateImage_, _delete_ } from '../../controllers/users.controller';
+import { _addImage, _deleteImage } from '../../controllers/ad_images.controller';
 
 const dashboardRouter = (app: express.Application): void => {
     // Users Routes
@@ -14,5 +15,8 @@ const dashboardRouter = (app: express.Application): void => {
     app.get('/dashboard/ads/read', _read);
     app.post('/dashboard/ads/update', _update);
     app.delete('/dashboard/ads/delete', _delete);
+    // Ads Images Routes
+    app.post('/dashboard/ads/add-image', _addImage);
+    app.delete('/dashboard/ads/delete-image', _deleteImage);
 }
 export default dashboardRouter;
