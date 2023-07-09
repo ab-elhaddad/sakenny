@@ -80,7 +80,7 @@ class Ads {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const connection = yield index_1.default.connect();
-                const sql = 'SELECT * FROM ads WHERE governorate=$1 AND city=$2 AND space_type=$3';
+                const sql = 'SELECT * FROM ads WHERE governorate=$1 AND city=$2 AND space_type=$3 ORDER BY id DESC';
                 const res = (yield connection.query(sql, [governorate, city, space_type])).rows;
                 // Getting images for each ad
                 for (const responseAd of res)

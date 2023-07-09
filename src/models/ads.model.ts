@@ -75,7 +75,7 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
         try {
             const connection = await client.connect();
 
-            const sql = 'SELECT * FROM ads WHERE governorate=$1 AND city=$2 AND space_type=$3';
+            const sql = 'SELECT * FROM ads WHERE governorate=$1 AND city=$2 AND space_type=$3 ORDER BY id DESC';
 
             const res = (await connection.query(sql, [governorate, city, space_type])).rows;
 
