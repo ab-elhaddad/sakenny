@@ -11,7 +11,9 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
             const connection = await client.connect();
             // Getting user id to for the ad
             const idSQL = 'SELECT id from users WHERE email=$1 or phone_number=$1';
-            const id = (await connection.query(idSQL, [user])).rows[0].id;
+            const idRes = await connection.query(idSQL, [user]);
+            if (idRes.rowCount === 0) return { Message: 'User not found', Flag: false };
+            const id = idRes.rows[0].id;
 
             // Inserting the new ad
             const sql = `INSERT INTO ads (user_id, title, space_type, description, price, city, governorate, lat, lng, gender, price_per, email, phone_number, features, terms) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10 ,$11 ,$12, $13, ($14::bit(20)), ($15::bit(10)) ) RETURNING id`;
