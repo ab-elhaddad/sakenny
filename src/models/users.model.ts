@@ -82,8 +82,8 @@ export class Users {
             }
 
             connection.release();
-            console.log(result);
-            if (result.rows[0].password === newHashedPassword)
+            //console.log(result);
+            if (result.rowCount > 0 && result.rows[0].password === newHashedPassword)
                 return ('Password Reset Successfully');
             else
                 return ('Password Reset Failed');
