@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._delete = exports._update = exports._read = exports._create = exports.getByUser = exports.update = exports.deleteAd = exports.search = exports.get = exports.getAll = exports.create = void 0;
+exports._delete = exports._update = exports._read = exports._create = exports.getByUser = exports.update = exports.deleteAd = exports.simpleSearch = exports.search = exports.get = exports.getAll = exports.create = void 0;
 const ads_model_1 = __importDefault(require("../models/ads.model"));
 const encryptFeatures_1 = __importStar(require("./functions/encryptFeatures"));
 const uploadImages_1 = __importDefault(require("./functions/uploadImages"));
@@ -142,6 +142,20 @@ const search = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.search = search;
+const simpleSearch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield ads.simpleSearch(req.body.governorate, req.body.city, req.body.space_type);
+        if (result.Flag)
+            return res.json(result);
+        else
+            return res.json(result).status(401);
+    }
+    catch (e) {
+        console.log('Error in simpleSearch function in ads.controller\n', e);
+        res.json({ Message: 'An error occured', Flag: false });
+    }
+});
+exports.simpleSearch = simpleSearch;
 const deleteAd = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield ads.deleteAd(req.body.ad_id, res.locals.user);
     if (result.Message.includes('successfully'))

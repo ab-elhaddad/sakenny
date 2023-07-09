@@ -118,6 +118,20 @@ export const search = async (req: express.Request, res: express.Response) => {
     }
 }
 
+export const simpleSearch = async (req: express.Request, res: express.Response) => {
+    try {
+        const result = await ads.simpleSearch(req.body.governorate, req.body.city, req.body.space_type);
+        if (result.Flag)
+            return res.json(result);
+        else
+            return res.json(result).status(401);
+    }
+    catch (e) {
+        console.log('Error in simpleSearch function in ads.controller\n', e);
+        res.json({ Message: 'An error occured', Flag: false });
+    }
+}
+
 export const deleteAd = async (req: express.Request, res: express.Response) => {
     const result = await ads.deleteAd(req.body.ad_id, res.locals.user);
 

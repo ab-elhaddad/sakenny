@@ -71,6 +71,27 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
         }
     }
 
+    async simpleSearch(governorate: string, city: string, space_type: string) {
+        try {
+            const connection = await client.connect();
+
+            const sql = 'SELECT * FROM ads WHERE governorate=$1 AND city=$2 AND space_type=$3';
+
+            const res = (await connection.query(sql, [governorate, city, space_type])).rows;
+
+            // Getting images for each ad
+            for (const responseAd of res)
+                responseAd.images = await this.getImages(responseAd.id, connection);
+
+            connection.release();
+            return { Message: 'Ads found', Flag: true, Ads: res };
+        }
+        catch (e) {
+            console.log('Error in simpleSearch function in ads.model\n', e);
+            return { Message: 'Something went wrong!', Flag: false };
+        }
+    }
+
     async getImages(ad_id: number, connection: PoolClient) {
         try {
             const sql = "SELECT url, description FROM ad_images WHERE ad_id=$1";
