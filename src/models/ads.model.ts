@@ -5,8 +5,7 @@ import { searchedAd } from "../types/serchedAd.type";
 import { updatedAd } from "../types/updatedAd.type";
 
 class Ads { // Create - Search - Update - getAll(Home) - getOne
-    // TODO
-    // - return created ads
+    // return created ads
     async create(user: string, ad: Ad): Promise<any> {
         try {
             const connection = await client.connect();
