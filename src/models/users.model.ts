@@ -94,7 +94,7 @@ export class Users {
         }
     }
 
-    async profile(user: string): Promise<User | null> {
+    async profile(user: string): Promise<any> {
         try {
             const connection = (await client.connect())
 
