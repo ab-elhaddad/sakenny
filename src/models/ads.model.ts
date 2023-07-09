@@ -213,6 +213,9 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
             return { Message: "No such user with the provided email or phone number", Flag: false };
         }
 
+        const adImagesSQL = 'DELETE FROM ad_images WHERE ad_id=($1)';
+        await connection.query(adImagesSQL, [ad_id]);
+
         const sql = 'DELETE FROM ads WHERE id=($1) and user_id=($2)';
         const res = await connection.query(sql, [ad_id, user_id]);
         connection.release();
