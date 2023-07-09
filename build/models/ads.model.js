@@ -41,8 +41,8 @@ class Ads {
                         row += ',';
                     urlSQL += row;
                 }
-                console.log(urlSQL);
-                console.log(ad.images_description, ad.images);
+                //console.log(urlSQL);
+                //console.log(ad.images_description, ad.images);
                 // Executing one query to insert all ad images
                 if (ad.images && ad.images.length > 0)
                     yield connection.query(urlSQL, values);
@@ -112,8 +112,12 @@ class Ads {
     update(ad_id, ad) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log(ad);
+                //console.log(ad);
                 const connection = yield index_1.default.connect();
+                const testAdIdSQL = 'SELECT id FROM ads WHERE id=$1';
+                const testAdIdRes = yield connection.query(testAdIdSQL, [ad_id]);
+                if (testAdIdRes.rowCount === 0)
+                    return { Message: 'Ad not found', Flag: false };
                 let attributesCounter = 2;
                 let sql = `UPDATE ads SET `
                     + (ad.new_title ? `title=$${attributesCounter++},` : ``)
@@ -134,7 +138,7 @@ class Ads {
                     sql = sql.slice(0, sql.length - 1);
                 sql += ` WHERE id=$1 `;
                 sql += `RETURNING *`;
-                console.log(sql);
+                //console.log(sql);
                 let updatedAttributes = [ad_id];
                 if (ad.new_title)
                     updatedAttributes.push(ad.new_title);
@@ -164,7 +168,7 @@ class Ads {
                     updatedAttributes.push(ad.new_features);
                 if (ad.new_terms != undefined)
                     updatedAttributes.push(ad.new_terms);
-                console.log(updatedAttributes);
+                //console.log(updatedAttributes);
                 const res = (yield (connection.query(sql, updatedAttributes))).rows[0];
                 return { Message: 'Data updated successfully', ad: res };
             }
@@ -217,7 +221,13 @@ class Ads {
     deleteAd(ad_id, user) {
         return __awaiter(this, void 0, void 0, function* () {
             const connection = yield index_1.default.connect();
-            const user_id = (yield connection.query('SELECT id FROM users WHERE email=$1 or phone_number=$1', [user])).rows[0].id;
+            let user_id;
+            try {
+                user_id = (yield connection.query('SELECT id FROM users WHERE email=$1 or phone_number=$1', [user])).rows[0].id;
+            }
+            catch (e) {
+                return { Message: "No such user with the provided email or phone number", Flag: false };
+            }
             const sql = 'DELETE FROM ads WHERE id=($1) and user_id=($2)';
             const res = yield connection.query(sql, [ad_id, user_id]);
             connection.release();
@@ -301,7 +311,7 @@ class Ads {
                     sql = sql.slice(0, sql.length - 1);
                 sql += ` WHERE id=$1 `;
                 sql += `RETURNING *`;
-                console.log(sql);
+                //console.log(sql);
                 let updatedAttributes = [ad_id];
                 for (const attribute of Object.keys(ad))
                     if (attribute)

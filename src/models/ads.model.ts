@@ -31,8 +31,8 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
                 if (i != ad.images.length - 1) row += ',';
                 urlSQL += row
             }
-            console.log(urlSQL);
-            console.log(ad.images_description, ad.images);
+            //console.log(urlSQL);
+            //console.log(ad.images_description, ad.images);
             // Executing one query to insert all ad images
             if (ad.images && ad.images.length > 0)
                 await connection.query(urlSQL, values);
@@ -107,8 +107,13 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
 
     async update(ad_id: number, ad: updatedAd) {
         try {
-            console.log(ad);
+            //console.log(ad);
             const connection = await client.connect();
+
+            const testAdIdSQL = 'SELECT id FROM ads WHERE id=$1';
+            const testAdIdRes = await connection.query(testAdIdSQL, [ad_id]);
+            if (testAdIdRes.rowCount === 0) return { Message: 'Ad not found', Flag: false };
+
             let attributesCounter = 2;
             let sql = `UPDATE ads SET `
                 + (ad.new_title ? `title=$${attributesCounter++},` : ``)
@@ -130,7 +135,7 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
             sql += ` WHERE id=$1 `
             sql += `RETURNING *`;
 
-            console.log(sql);
+            //console.log(sql);
 
             let updatedAttributes: any[] = [ad_id];
             if (ad.new_title) updatedAttributes.push(ad.new_title);
@@ -148,7 +153,7 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
             if (ad.new_features != undefined) updatedAttributes.push(ad.new_features);
             if (ad.new_terms != undefined) updatedAttributes.push(ad.new_terms);
 
-            console.log(updatedAttributes);
+            //console.log(updatedAttributes);
             const res = (await (connection.query(sql, updatedAttributes))).rows[0];
             return { Message: 'Data updated successfully', ad: res };
         }
@@ -200,8 +205,13 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
 
     async deleteAd(ad_id: number, user: string): Promise<any> {
         const connection = await client.connect();
-
-        const user_id = (await connection.query('SELECT id FROM users WHERE email=$1 or phone_number=$1', [user])).rows[0].id;
+        let user_id;
+        try {
+            user_id = (await connection.query('SELECT id FROM users WHERE email=$1 or phone_number=$1', [user])).rows[0].id;
+        }
+        catch (e) {
+            return { Message: "No such user with the provided email or phone number", Flag: false };
+        }
 
         const sql = 'DELETE FROM ads WHERE id=($1) and user_id=($2)';
         const res = await connection.query(sql, [ad_id, user_id]);
@@ -287,7 +297,7 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
             sql += ` WHERE id=$1 `
             sql += `RETURNING *`;
 
-            console.log(sql);
+            //console.log(sql);
 
             let updatedAttributes: any[] = [ad_id];
             for (const attribute of Object.keys(ad))
