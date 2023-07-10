@@ -43,10 +43,8 @@ export const create = async (req: express.Request, res: express.Response) => {
 
         const result = await ads.create(res.locals.user, ad);
 
-        for (let returnedAd of result.ads) {
-            returnedAd.features = decryptFeatures(returnedAd.features);
-            returnedAd.terms = decryptTerms(returnedAd.terms);
-        }
+        result.ad.features = decryptFeatures(result.ad.features);
+        result.ad.terms = decryptTerms(result.ad.terms);
 
         if (result.Message.includes('successfully'))
             res.json(result);

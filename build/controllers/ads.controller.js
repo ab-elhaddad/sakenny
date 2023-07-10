@@ -71,10 +71,8 @@ const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             images_description: images_description
         };
         const result = yield ads.create(res.locals.user, ad);
-        for (let returnedAd of result.ads) {
-            returnedAd.features = (0, decryptFeatures_1.default)(returnedAd.features);
-            returnedAd.terms = (0, decryptTerms_1.default)(returnedAd.terms);
-        }
+        result.ad.features = (0, decryptFeatures_1.default)(result.ad.features);
+        result.ad.terms = (0, decryptTerms_1.default)(result.ad.terms);
         if (result.Message.includes('successfully'))
             res.json(result);
         else
