@@ -55,6 +55,8 @@ export class Users {
             if (res.rowCount === 0)
                 return 'Wrong Email Or Phone Number!';
 
+            connection.release();
+
             const exists = bcrypt.compareSync(plainPassword, res.rows[0].password);
             if (exists)
                 return jwt.sign(email === undefined ? phone_number : email, config.secret_key);
@@ -130,6 +132,8 @@ export class Users {
                 const resEmail = res.rows[0].email as string;
                 const resPhone_number = res.rows[0].phone_number as string;
 
+                connection.release();
+
                 if (resFullname === fullname)
                     return ({ Message: "Fullname updated successfully", Token: jwt.sign(!resEmail ? resPhone_number as string : resEmail, config.secret_key) });
                 else
@@ -140,6 +144,9 @@ export class Users {
             if (email) {
                 const sql = "UPDATE users SET email=$1 WHERE email=$2 OR phone_number=$2 RETURNING email";
                 const res = (await connection.query(sql, [email, user])).rows[0].email;
+
+                connection.release();
+
                 if (res === email)
                     return ({ Message: "Email updated successfully", Token: jwt.sign(email as string, config.secret_key) });
                 else
@@ -150,6 +157,9 @@ export class Users {
             if (phone_number) {
                 const sql = "UPDATE users SET phone_number=$1 WHERE email=$2 OR phone_number=$2 RETURNING phone_number";
                 const res = (await connection.query(sql, [phone_number, user])).rows[0].phone_number;
+
+                connection.release();
+
                 if (res === phone_number)
                     return ({ Message: "Phone number updated successfully", Token: jwt.sign(phone_number as string, config.secret_key) });
                 else
@@ -160,12 +170,15 @@ export class Users {
                 const sql = "UPDATE users SET profile_pic=$1 WHERE email=$2 OR phone_number=$2 RETURNING profile_pic";
                 const res = await connection.query(sql, [profile_pic, user]);
 
+                connection.release();
+
                 if (res.rows[0].profile_pic === profile_pic)
                     return ({ Message: "Profile Picture updated successfully", Token: jwt.sign(user, config.secret_key) });
                 else
                     return ({ Message: "Profile Picture update failed" });
             }
 
+            connection.release();
             //returns if no condition was entered
             return ({ Message: "No Data Entered" });
         }
@@ -177,6 +190,7 @@ export class Users {
 
     async updatePassword(user: string, oldPassword: string, newPassword: string): Promise<string> {
         try {
+            const connection = await client.connect();
             // Getting the row associated with the passed email or phone number
             let sql = 'SELECT * FROM users WHERE email=$1 OR phone_number=$1';
             const row = (await client.query(sql, [user])).rows[0];
@@ -189,7 +203,9 @@ export class Users {
             // Hashing the new password and storing it in the database
             const hashedPassword = bcrypt.hashSync(newPassword, config.salt);
             sql = 'UPDATE users SET password=$1 WHERE email=$2 OR phone_number=$2 RETURNING password';
-            const res = await client.query(sql, [hashedPassword, user]);
+            const res = await connection.query(sql, [hashedPassword, user]);
+
+            connection.release();
 
             const changed = bcrypt.compareSync(newPassword, res.rows[0].password);
             if (changed)
@@ -208,6 +224,7 @@ export class Users {
             const connection = await client.connect();
             const sql = "INSERT INTO users (fullname, email, phone_number, password) VALUES ($1, $2, $3, $4)";
             await connection.query(sql, [user.fullname, user.email, user.phone_number, user.password]);
+            connection.release();
         }
         catch (e) {
             console.log('Error in _create function in users.model\n', e);
@@ -220,6 +237,7 @@ export class Users {
             const connection = await client.connect();
             const sql = "SELECT * FROM users ORDER BY id ASC";
             const res = await connection.query(sql);
+            connection.release();
             return res.rows;
         }
         catch (e) {
@@ -234,6 +252,7 @@ export class Users {
             const connection = await client.connect();
             const sql = "UPDATE users SET fullname=$1, email=$2, phone_number=$3, password=$4 WHERE id=$5";
             await connection.query(sql, [user.fullname, user.email, user.phone_number, user.password, user.id]);
+            connection.release();
         }
         catch (e) {
             console.log('Error in _update function in users.model\n', e);
@@ -246,6 +265,7 @@ export class Users {
             const connection = await client.connect();
             const sql = "UPDATE users SET profile_pic=$1 WHERE id=$2";
             await connection.query(sql, [url, id]);
+            connection.release();
         }
         catch (e) {
             console.log('Error in _updatePicture function in users.model\n', e);
@@ -258,6 +278,7 @@ export class Users {
             const connection = await client.connect();
             const sql = "DELETE FROM users WHERE id=$1";
             await connection.query(sql, [id]);
+            connection.release();
         }
         catch (e) {
             console.log('Error in _delete function in users.model\n', e);
