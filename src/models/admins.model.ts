@@ -36,8 +36,10 @@ class Admins {
             const isRightPassword = bcrypt.compareSync(password, encryptedPassword);
 
             connection.release();
+
+            const token = JWT.sign(username, config.secret_key) as string;
             if (isRightPassword)
-                return String(JWT.decode(username));
+                return token;
             else
                 return null;
         }

@@ -46,8 +46,9 @@ class Admins {
                 const encryptedPassword = res.rows[0].password;
                 const isRightPassword = bcrypt_1.default.compareSync(password, encryptedPassword);
                 connection.release();
+                const token = jsonwebtoken_1.default.sign(username, config_1.config.secret_key);
                 if (isRightPassword)
-                    return String(jsonwebtoken_1.default.decode(username));
+                    return token;
                 else
                     return null;
             }
