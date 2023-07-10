@@ -225,7 +225,7 @@ export const _create = async (req: express.Request, res: express.Response) => {
             images_description: images_description
         }
 
-        await ads._create(ad);
+        await ads._create(req.body.user_id, ad);
         res.json({ Message: 'Ad created successfully', Flag: true });
     }
     catch (e) {

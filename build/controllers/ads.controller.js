@@ -241,7 +241,7 @@ const _create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             images: images_url,
             images_description: images_description
         };
-        yield ads._create(ad);
+        yield ads._create(req.body.user_id, ad);
         res.json({ Message: 'Ad created successfully', Flag: true });
     }
     catch (e) {

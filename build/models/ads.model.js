@@ -170,6 +170,7 @@ class Ads {
                     updatedAttributes.push(ad.new_terms);
                 //console.log(updatedAttributes);
                 const res = (yield (connection.query(sql, updatedAttributes))).rows[0];
+                connection.release();
                 return { Message: 'Data updated successfully', ad: res };
             }
             catch (e) {
@@ -261,12 +262,12 @@ class Ads {
         });
     }
     // CRUD Operations
-    _create(ad) {
+    _create(user_id, ad) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const connection = yield index_1.default.connect();
                 const sql = `INSERT INTO ads (user_id, title, space_type, description, price, city, governorate, lat, lng, gender, price_per, email, phone_number, features, terms) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10 ,$11 ,$12, $13, ($14::bit(20)), ($15::bit(10)) ) RETURNING id`;
-                yield connection.query(sql, [0, ad.title, ad.space_type, ad.description, ad.price, ad.city, ad.governorate, ad.lat, ad.lng, ad.gender, ad.price_per, ad.email, ad.phone_number, ad.features, ad.terms]);
+                yield connection.query(sql, [user_id, ad.title, ad.space_type, ad.description, ad.price, ad.city, ad.governorate, ad.lat, ad.lng, ad.gender, ad.price_per, ad.email, ad.phone_number, ad.features, ad.terms]);
                 connection.release();
             }
             catch (e) {
@@ -281,6 +282,7 @@ class Ads {
                 const connection = yield index_1.default.connect();
                 const sql = `SELECT * FROM ads ORDER BY id DESC`;
                 const res = yield connection.query(sql);
+                connection.release();
                 return res.rows;
             }
             catch (e) {
@@ -315,9 +317,37 @@ class Ads {
                 sql += `RETURNING *`;
                 //console.log(sql);
                 let updatedAttributes = [ad_id];
-                for (const attribute of Object.keys(ad))
-                    if (attribute)
-                        updatedAttributes.push(attribute);
+                // for (const attribute of Object.keys(ad))
+                //     if (attribute) updatedAttributes.push(attribute);
+                if (ad.new_title)
+                    updatedAttributes.push(ad.new_title);
+                if (ad.new_space_type)
+                    updatedAttributes.push(ad.new_space_type);
+                if (ad.new_description)
+                    updatedAttributes.push(ad.new_description);
+                if (ad.new_price)
+                    updatedAttributes.push(ad.new_price);
+                if (ad.new_city)
+                    updatedAttributes.push(ad.new_city);
+                if (ad.new_governorate)
+                    updatedAttributes.push(ad.new_governorate);
+                if (ad.new_lng)
+                    updatedAttributes.push(ad.new_lng);
+                if (ad.new_lat)
+                    updatedAttributes.push(ad.new_lat);
+                if (ad.new_gender != undefined)
+                    updatedAttributes.push(ad.new_gender);
+                if (ad.new_email)
+                    updatedAttributes.push(ad.new_email);
+                if (ad.new_phone_number)
+                    updatedAttributes.push(ad.new_phone_number);
+                if (ad.new_price_per)
+                    updatedAttributes.push(ad.new_price_per);
+                if (ad.new_features != undefined)
+                    updatedAttributes.push(ad.new_features);
+                if (ad.new_terms != undefined)
+                    updatedAttributes.push(ad.new_terms);
+                connection.release();
                 yield connection.query(sql, updatedAttributes);
             }
             catch (e) {
@@ -332,6 +362,7 @@ class Ads {
                 const connection = yield index_1.default.connect();
                 const sql = `DELETE FROM ads WHERE id=$1`;
                 yield connection.query(sql, [ad_id]);
+                connection.release();
             }
             catch (e) {
                 console.log('Error in _delete function in ads.model\n', e);
