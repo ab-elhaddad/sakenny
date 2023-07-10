@@ -16,6 +16,7 @@ type ReturnedAd = {
     terms?: string | string[],
     price_per: string,
     images?: any[],
+    creation_date?: string
 }
 
 export default ReturnedAd;

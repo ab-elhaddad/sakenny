@@ -18,6 +18,11 @@ const index_1 = __importDefault(require("./../../database/index"));
 const ads = new ads_model_1.default();
 const users = new users_model_1.Users();
 xdescribe("Testing Ads Model", () => {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const formattedDate = `${day}-${month}-${year}`;
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
         const u = {
             fullname: 'testUser',
@@ -44,7 +49,8 @@ xdescribe("Testing Ads Model", () => {
             terms: '1100',
             price_per: 'month',
             images: ['url1', 'url2'],
-            images_description: ['desc1', 'desc2']
+            images_description: ['desc1', 'desc2'],
+            creation_date: formattedDate
         };
         // Successful create
         it("Create [Should return the created ad]", () => __awaiter(void 0, void 0, void 0, function* () {
@@ -80,6 +86,7 @@ xdescribe("Testing Ads Model", () => {
                         description: 'desc2'
                     }
                 ],
+                creation_date: formattedDate
             };
             expect(res).toEqual({
                 Message: 'Ad inserted successfully',
@@ -255,6 +262,7 @@ xdescribe("Testing Ads Model", () => {
                         description: 'desc2'
                     }
                 ],
+                creation_date: formattedDate
             };
             expect(res).toEqual({ Message: "Ad retrived successfully", Flag: true, ad: returnedAd });
         }));

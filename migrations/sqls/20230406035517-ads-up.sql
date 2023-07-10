@@ -15,5 +15,6 @@ CREATE TABLE IF NOT EXISTS ads
     terms BIT(10),
     price_per VARCHAR(5) NOT NULL,
     email VARCHAR(100),
-    phone_number VARCHAR(20) NOT NULL
+    phone_number VARCHAR(20) NOT NULL,
+    creation_date VARCHAR(10)
 );

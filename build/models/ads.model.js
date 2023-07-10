@@ -25,9 +25,15 @@ class Ads {
                 if (idRes.rowCount === 0)
                     return { Message: 'User not found', Flag: false };
                 const id = idRes.rows[0].id;
+                // Getting the current date
+                const currentDate = new Date();
+                const year = currentDate.getFullYear();
+                const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+                const day = String(currentDate.getDate()).padStart(2, '0');
+                const formattedDate = `${day}-${month}-${year}`;
                 // Inserting the new ad
-                const sql = `INSERT INTO ads (user_id, title, space_type, description, price, city, governorate, lat, lng, gender, price_per, email, phone_number, features, terms) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10 ,$11 ,$12, $13, ($14::bit(20)), ($15::bit(10)) ) RETURNING id`;
-                const res = yield connection.query(sql, [id, ad.title, ad.space_type, ad.description, ad.price, ad.city, ad.governorate, ad.lat, ad.lng, ad.gender, ad.price_per, ad.email, ad.phone_number, ad.features, ad.terms]);
+                const sql = `INSERT INTO ads (user_id, title, space_type, description, price, city, governorate, lat, lng, gender, price_per, email, phone_number, features, terms, creation_date) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10 ,$11 ,$12, $13, ($14::bit(20)), ($15::bit(10)), $16 ) RETURNING id`;
+                const res = yield connection.query(sql, [id, ad.title, ad.space_type, ad.description, ad.price, ad.city, ad.governorate, ad.lat, ad.lng, ad.gender, ad.price_per, ad.email, ad.phone_number, ad.features, ad.terms, formattedDate]);
                 // Inserting images in ad_images
                 const ad_id = res.rows[0].id;
                 let urlSQL = 'INSERT INTO ad_images (ad_id, url, description) VALUES ';
@@ -41,8 +47,6 @@ class Ads {
                         row += ',';
                     urlSQL += row;
                 }
-                //console.log(urlSQL);
-                //console.log(ad.images_description, ad.images);
                 // Executing one query to insert all ad images
                 if (ad.images && ad.images.length > 0)
                     yield connection.query(urlSQL, values);

@@ -16,7 +16,8 @@ type Ad = {
     terms?: string,
     price_per: string,
     images?: string[],
-    images_description?: string[] | null
+    images_description?: string[] | null,
+    creation_date?: string
 }
 
 export default Ad;
