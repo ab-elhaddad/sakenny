@@ -1,7 +1,8 @@
 import express from 'express';
-import { signIn } from '../../controllers/admins.controller';
+import { signIn, signUp } from '../../controllers/admins.controller';
 
 const adminsRouter = (app: express.Application): void => {
+    app.post('/admins/sign-up', signUp);
     app.post('/admins/sign-in', signIn);
 }
 
