@@ -242,12 +242,26 @@ class Users {
             // All data is required however it is not required to change all data
             try {
                 const connection = yield index_1.default.connect();
-                const sql = "UPDATE users SET fullname=$1, email=$2, phone_number=$3, password=$4 WHERE id=$5";
-                yield connection.query(sql, [user.fullname, user.email, user.phone_number, user.password, user.id]);
+                const sql = "UPDATE users SET fullname=$1, email=$2, phone_number=$3 WHERE id=$4";
+                yield connection.query(sql, [user.fullname, user.email, user.phone_number, user.id]);
                 connection.release();
             }
             catch (e) {
                 console.log('Error in _update function in users.model\n', e);
+                throw e;
+            }
+        });
+    }
+    _update_password(id, newPassword) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const connection = yield index_1.default.connect();
+                const sql = "UPDATE users SET password=$1 WHERE id=$2";
+                yield connection.query(sql, [newPassword, id]);
+                connection.release();
+            }
+            catch (e) {
+                console.log('Error in _update_password function in users.model\n', e);
                 return;
             }
         });

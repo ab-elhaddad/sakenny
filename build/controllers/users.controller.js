@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._delete_ = exports._updateImage_ = exports._update_ = exports._read_ = exports._create_ = exports.updatePassword = exports.update = exports.profile = exports.resetPassword = exports.login = exports.register = void 0;
+exports._delete_ = exports._updateImage_ = exports._update_password_ = exports._update_ = exports._read_ = exports._create_ = exports.updatePassword = exports.update = exports.profile = exports.resetPassword = exports.login = exports.register = void 0;
 const users_model_1 = require("../models/users.model");
 const uploadImages_1 = __importDefault(require("./functions/uploadImages"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -178,8 +178,7 @@ const _update_ = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             id: req.body.id,
             fullname: req.body.fullname,
             email: req.body.email,
-            phone_number: req.body.phone_number,
-            password: bcrypt_1.default.hashSync(req.body.password, config_1.config.salt)
+            phone_number: req.body.phone_number
         };
         yield users._update(inputUser);
         res.json({ Message: 'User Updated Successfully', Flag: true });
@@ -190,6 +189,19 @@ const _update_ = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports._update_ = _update_;
+const _update_password_ = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const id = req.body.id;
+        const password = bcrypt_1.default.hashSync(req.body.password, config_1.config.salt);
+        yield users._update_password(id, password);
+        res.json({ Message: 'User Password Updated Successfully', Flag: true });
+    }
+    catch (e) {
+        console.log('Error in _update_password function in users.controller\n', e);
+        res.json({ Message: 'An error occured', Flag: false }).status(500);
+    }
+});
+exports._update_password_ = _update_password_;
 const _updateImage_ = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const url = (yield (0, uploadImages_1.default)(req.files, 'Profile Images'))[0];
