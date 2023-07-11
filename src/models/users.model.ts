@@ -246,16 +246,29 @@ export class Users {
         }
     }
 
-    async _update(user: User): Promise<void> {
+    async _update(user): Promise<void> {
         // All data is required however it is not required to change all data
         try {
             const connection = await client.connect();
-            const sql = "UPDATE users SET fullname=$1, email=$2, phone_number=$3, password=$4 WHERE id=$5";
-            await connection.query(sql, [user.fullname, user.email, user.phone_number, user.password, user.id]);
+            const sql = "UPDATE users SET fullname=$1, email=$2, phone_number=$3 WHERE id=$4";
+            await connection.query(sql, [user.fullname, user.email, user.phone_number, user.id]);
             connection.release();
         }
         catch (e) {
             console.log('Error in _update function in users.model\n', e);
+            throw e;
+        }
+    }
+
+    async _update_password(id: number, newPassword: string): Promise<void> {
+        try {
+            const connection = await client.connect();
+            const sql = "UPDATE users SET password=$1 WHERE id=$2";
+            await connection.query(sql, [newPassword, id]);
+            connection.release();
+        }
+        catch (e) {
+            console.log('Error in _update_password function in users.model\n', e);
             return;
         }
     }

@@ -168,18 +168,30 @@ export const _read_ = async (req: express.Request, res: express.Response): Promi
 export const _update_ = async (req: express.Request, res: express.Response): Promise<void> => {
     // All data is required however it is not required to change all data
     try {
-        const inputUser: User = {
+        const inputUser = {
             id: req.body.id,
             fullname: req.body.fullname,
             email: req.body.email,
-            phone_number: req.body.phone_number,
-            password: bcrypt.hashSync(req.body.password, config.salt)
+            phone_number: req.body.phone_number
         };
         await users._update(inputUser);
         res.json({ Message: 'User Updated Successfully', Flag: true });
     }
     catch (e) {
         console.log('Error in _update function in users.controller\n', e);
+        res.json({ Message: 'An error occured', Flag: false }).status(500);
+    }
+}
+
+export const _update_password_ = async (req: express.Request, res: express.Response): Promise<void> => {
+    try {
+        const id = req.body.id;
+        const password = bcrypt.hashSync(req.body.password, config.salt);
+        await users._update_password(id, password);
+        res.json({ Message: 'User Password Updated Successfully', Flag: true });
+    }
+    catch (e) {
+        console.log('Error in _update_password function in users.controller\n', e);
         res.json({ Message: 'An error occured', Flag: false }).status(500);
     }
 }
