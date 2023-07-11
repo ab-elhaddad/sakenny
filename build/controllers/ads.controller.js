@@ -251,10 +251,14 @@ exports._create = _create;
 const _read = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield ads._read();
+        for (const ad of result) {
+            ad.features = (0, decryptFeatures_1.default)(ad.features);
+            ad.terms = (0, decryptTerms_1.default)(ad.terms);
+        }
         res.json({ Message: 'Data retrived successfully', Flag: true, Ads: result });
     }
     catch (e) {
-        console.log('Error in _read function in ads.controller');
+        console.log('Error in _read function in ads.controller\n', e);
         res.json({ Message: 'An error occured', Flag: false });
     }
 });

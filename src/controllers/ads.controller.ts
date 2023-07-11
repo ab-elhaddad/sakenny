@@ -235,10 +235,16 @@ export const _create = async (req: express.Request, res: express.Response) => {
 export const _read = async (req: express.Request, res: express.Response) => {
     try {
         const result = await ads._read();
+
+        for (const ad of result) {
+            ad.features = decryptFeatures(ad.features);
+            ad.terms = decryptTerms(ad.terms);
+        }
+
         res.json({ Message: 'Data retrived successfully', Flag: true, Ads: result });
     }
     catch (e) {
-        console.log('Error in _read function in ads.controller');
+        console.log('Error in _read function in ads.controller\n', e);
         res.json({ Message: 'An error occured', Flag: false });
     }
 }

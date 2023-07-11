@@ -288,7 +288,7 @@ class Ads {
                 const res = yield connection.query(sql);
                 // get ads images
                 for (const ad of res.rows) {
-                    ad.images = this.getImages(ad.id, connection);
+                    ad.images = yield this.getImages(ad.id, connection);
                 }
                 connection.release();
                 return res.rows;

@@ -279,7 +279,7 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
 
             // get ads images
             for (const ad of res.rows) {
-                ad.images = this.getImages(ad.id, connection);
+                ad.images = await this.getImages(ad.id, connection);
             }
 
             connection.release();
