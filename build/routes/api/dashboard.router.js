@@ -14,6 +14,7 @@ const dashboardRouter = (app) => {
     app.post('/dashboard/users/create', users_controller_1._create_);
     app.get('/dashboard/users/read', users_controller_1._read_);
     app.post('/dashboard/users/update', users_controller_1._update_);
+    app.post('/dashboard/users/update-password', users_controller_1._update_password_);
     app.post('/dashboard/users/update-image', upload.array('images'), users_controller_1._updateImage_);
     app.delete('/dashboard/users/delete', users_controller_1._delete_);
     // Ads Routes
