@@ -70,7 +70,7 @@ const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             images: images_url,
             images_description: images_description
         };
-        const result = yield ads.create(res.locals.user, ad);
+        const result = yield ads.create(req.body.user, ad);
         result.ad.features = (0, decryptFeatures_1.default)(result.ad.features);
         result.ad.terms = (0, decryptTerms_1.default)(result.ad.terms);
         if (result.Message.includes('successfully'))

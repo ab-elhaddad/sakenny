@@ -41,7 +41,7 @@ export const create = async (req: express.Request, res: express.Response) => {
             images_description: images_description
         }
 
-        const result = await ads.create(res.locals.user, ad);
+        const result = await ads.create(req.body.user, ad);
 
         result.ad.features = decryptFeatures(result.ad.features);
         result.ad.terms = decryptTerms(result.ad.terms);
