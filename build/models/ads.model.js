@@ -286,6 +286,10 @@ class Ads {
                 const connection = yield index_1.default.connect();
                 const sql = `SELECT * FROM ads ORDER BY id DESC`;
                 const res = yield connection.query(sql);
+                // get ads images
+                for (const ad of res.rows) {
+                    ad.images = this.getImages(ad.id, connection);
+                }
                 connection.release();
                 return res.rows;
             }

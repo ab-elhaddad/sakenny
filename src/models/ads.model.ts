@@ -276,6 +276,12 @@ class Ads { // Create - Search - Update - getAll(Home) - getOne
             const connection = await client.connect();
             const sql = `SELECT * FROM ads ORDER BY id DESC`;
             const res = await connection.query(sql);
+
+            // get ads images
+            for (const ad of res.rows) {
+                ad.images = this.getImages(ad.id, connection);
+            }
+
             connection.release();
             return res.rows;
         }
