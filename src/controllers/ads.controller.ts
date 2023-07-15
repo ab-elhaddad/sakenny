@@ -14,7 +14,7 @@ const ads = new Ads();
 // return created ad
 export const create = async (req: express.Request, res: express.Response) => {
     try {
-        console.log(req.files);
+        //console.log(req.body);
         // Converting features and terms to bitset (e.g 01101)
         const features = encryptFeatues((req.body.features ? req.body.features : "").split('-'));
         const terms = encryptTerms((req.body.terms ? req.body.terms : "").split('-'));
@@ -41,7 +41,9 @@ export const create = async (req: express.Request, res: express.Response) => {
             images_description: images_description
         }
 
-        const result = await ads.create(req.body.user, ad);
+        const result = await ads.create(res.locals.user, ad);
+
+        console.log(result);
 
         result.ad.features = decryptFeatures(result.ad.features);
         result.ad.terms = decryptTerms(result.ad.terms);

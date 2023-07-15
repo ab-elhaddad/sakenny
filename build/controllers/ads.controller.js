@@ -46,7 +46,7 @@ const ads = new ads_model_1.default();
 // return created ad
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log(req.files);
+        //console.log(req.body);
         // Converting features and terms to bitset (e.g 01101)
         const features = (0, encryptFeatures_1.default)((req.body.features ? req.body.features : "").split('-'));
         const terms = (0, encryptTerms_1.default)((req.body.terms ? req.body.terms : "").split('-'));
@@ -70,7 +70,8 @@ const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             images: images_url,
             images_description: images_description
         };
-        const result = yield ads.create(req.body.user, ad);
+        const result = yield ads.create(res.locals.user, ad);
+        console.log(result);
         result.ad.features = (0, decryptFeatures_1.default)(result.ad.features);
         result.ad.terms = (0, decryptTerms_1.default)(result.ad.terms);
         if (result.Message.includes('successfully'))
