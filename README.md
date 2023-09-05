@@ -1,5 +1,5 @@
 # Sakkeny
-## My Graduation Project *(Currently working on it)*
+## My Graduation Project
 #### An Application For Reserving Residential Spaces which aims mainly on helping students that study away from their homes to find a place to stay in by offering them 3 options of sapces (Bed - Room - Apartment). We are aiming to provide variety of options for each student so they can find the most suitable space for them.
 
 *The code included in this repository is the implementation of the backend server whose APIs should be used in a Flutter application.*
