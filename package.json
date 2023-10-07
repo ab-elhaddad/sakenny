@@ -4,13 +4,13 @@
   "description": "",
   "main": "build/index.js",
   "scripts": {
-    "start": "nodemon src/index.ts",
+    "start": "nodemon src/index.js",
     "test": "db-migrate reset&& db-migrate up&& npx tsc&&jasmine",
     "zip": "powershell Compress-Archive -Path .\\build,.\\migrations,.\\package.json,.\\README.md,database.json -DestinationPath .\\deploy.zip",
     "zip:clean": "del deploy.zip || true",
     "www:clean": "del www || true",
     "dev:build": "npx tsc && npm run zip:clean && npm run www:clean && npm run zip",
-    "build": "npx db-migrate up",
+    "migrate": "npx db-migrate up",
     "start:test": "set ENV=test&& nodemon src/index.ts",
     "start:prod": "set ENV=prod&& nodemon src/index.ts"
   },
