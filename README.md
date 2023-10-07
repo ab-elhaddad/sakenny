@@ -4,7 +4,7 @@
   <br>
   <br>
 </p>
-<h1 align="center">Sakenny Beckend Server</h1>
+<h1 align="center">Sakenny Server</h1>
 <br>
 
  > Sakenny is my Graduation Project which I passed with an **A+**.
